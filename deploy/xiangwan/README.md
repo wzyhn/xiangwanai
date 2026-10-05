@@ -17,6 +17,8 @@ docker compose --env-file deploy/xiangwan/.env \
 
 Compose 自动按 PostgreSQL → 登记迁移 → bootstrap → API → Admin 顺序启动。API 默认绑定本机 8082，后台默认 3002；自行配置 HTTPS 反向代理和相应域名。`deploy/sql/manifest.json` 登记每份 SQL 的 SHA256；已有迁移的内容与名称不可修改，新增迁移前滚并更新清单。
 
+本地直接运行二进制前，先创建 `STORAGE_LOCAL_DIR` 对应的空目录；容器镜像已经创建 `/data/xiangwan`。新的数据库没有已发布的首页配置，首页接口会暂时报配置不可用；首次管理员登录后保存并发布首页配置，再验收小程序首页。健康检查或往期活动空列表正常不代表首页已配置完成。
+
 首次后台使用 OIDC，独立身份提供方需要正确 issuer、client 与回调 URL。后台 `/api/v1/xiangwan/admin/auth/callback` 必须通过同源反向代理转发至 API；Next 的 rewrite 已包含该路径。将登录账号的 issuer/subject 填入 seed 变量后执行：
 
 ```sh

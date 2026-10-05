@@ -4469,15 +4469,15 @@
     },
     "packages/mp-product-registry/README.md": {
       "source_sha256": "75b92078037f59337807f0652b98e9106f74b0f48a3872d9b117ff67d216e9ee",
-      "exported_sha256": "75b92078037f59337807f0652b98e9106f74b0f48a3872d9b117ff67d216e9ee"
+      "exported_sha256": "c51fcbacfb6e85693b8e844d764b7c1c746338ae17b8986daf8a3d76eaa9df29"
     },
     "packages/mp-product-registry/index.js": {
       "source_sha256": "e216dc90914a767789240e8d02adea068d0cba6946e703f6745faddc820bebac",
-      "exported_sha256": "80f497baba00de8e60c2c3ccf8905c2617870f332a41b7987ce57c7e5c5dedb9"
+      "exported_sha256": "97296082f289e3c409d24e688d5d4fdfdfc600dbfb6ff0b5eab599811538f1eb"
     },
     "packages/mp-product-registry/index.test.js": {
       "source_sha256": "3b1c39c9f2f363e28f447dba6d5bb267543794d7f857098fa6bcc260d61d7e2d",
-      "exported_sha256": "79ac856daa1a61d395c5e5116d762cd6d0c7711c1dec2aa5732d38daedc89fb8"
+      "exported_sha256": "a68d13fe6a2ed3908b0b20e1581356a0ebd85e4cea10acf20894e11d7c9bcf26"
     },
     "packages/mp-product-registry/lib/lint.js": {
       "source_sha256": "4a147f7435015c4a16026baf833b17f8cb0fd63942ff9312627486c6ac3f8744",
@@ -4593,5 +4593,8 @@
     "mp-weconq-auth-client",
     "mp-weconq-auth-guard",
     "mp-weconq-auth-runtime"
+  ],
+  "distribution_adaptations": [
+    "Product registry contains only Xiangwan and preserves existing lookup/lint interface."
   ]
 }
