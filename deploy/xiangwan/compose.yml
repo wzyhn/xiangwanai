@@ -1,0 +1,370 @@
+name: xiangwan
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - "POSTGRES_USER=${XIANGWAN_POSTGRES_USER:-xiangwan}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}"
+      - "POSTGRES_DB=${XIANGWAN_POSTGRES_DB:-xiangwan}"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    volumes:
+      - xiangwan_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  api:
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    restart: unless-stopped
+    environment:
+      - "XIANGWAN_API_DATABASE_DSN=${XIANGWAN_API_DATABASE_DSN:?set XIANGWAN_API_DATABASE_DSN}"
+      - "XIANGWAN_TENANT_ID=${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - "XIANGWAN_GENERATION_ID=${XIANGWAN_GENERATION_ID:?set XIANGWAN_GENERATION_ID}"
+      - "JWT_SIGNING_KEY=${JWT_SIGNING_KEY:?set JWT_SIGNING_KEY}"
+      - "JWT_PREVIOUS_SECRETS=${JWT_PREVIOUS_SECRETS}"
+      - "XIANGWAN_APP_ID=${XIANGWAN_APP_ID:?set XIANGWAN_APP_ID}"
+      - "XIANGWAN_APP_SECRET=${XIANGWAN_APP_SECRET:?set XIANGWAN_APP_SECRET}"
+      # A production resource variable must never bypass the avatar review.
+      - "XIANGWAN_AVATAR_MODERATION_DISABLED=false"
+      - "XIANGWAN_EXTERNAL_DOMAINS=${XIANGWAN_EXTERNAL_DOMAINS:-}"
+      - "XIANGWAN_EXTERNAL_DOMAINS_POLICY_VERSION=${XIANGWAN_EXTERNAL_DOMAINS_POLICY_VERSION:-}"
+      - "XIANGWAN_PRIVACY_POLICY_VERSION=${XIANGWAN_PRIVACY_POLICY_VERSION:-}"
+      - "XIANGWAN_USER_AGREEMENT_VERSION=${XIANGWAN_USER_AGREEMENT_VERSION:-}"
+      - "XIANGWAN_CUSTOMER_SERVICE_POLICY_VERSION=${XIANGWAN_CUSTOMER_SERVICE_POLICY_VERSION:-}"
+      - "XIANGWAN_ALLOW_MANUAL_CONTACT=${XIANGWAN_ALLOW_MANUAL_CONTACT:-false}"
+      - "XIANGWAN_MANUAL_CONTACT_POLICY_VERSION=${XIANGWAN_MANUAL_CONTACT_POLICY_VERSION:-}"
+      - "XIANGWAN_MANUAL_CONTACT_POLICY_TEXT=${XIANGWAN_MANUAL_CONTACT_POLICY_TEXT:-}"
+      # Paid intake and WeChat prepay are an atomic safety pair. The runtime
+      # refuses paid=true/prepay=false so existing orders can drain without
+      # creating new Orders/Holds that cannot converge.
+      - "XIANGWAN_PAID_REGISTRATION_ENABLED=${XIANGWAN_PAID_REGISTRATION_ENABLED:-false}"
+      - "XIANGWAN_PAYMENT_MERCHANT_ID=${XIANGWAN_PAYMENT_MERCHANT_ID:-}"
+      - "XIANGWAN_PAYMENT_MERCHANT_CONFIG_GENERATION_ID=${XIANGWAN_PAYMENT_MERCHANT_CONFIG_GENERATION_ID:-}"
+      - "XIANGWAN_CANCEL_POLICY_VERSION=${XIANGWAN_CANCEL_POLICY_VERSION:-}"
+      - "XIANGWAN_CANCEL_FULL_REFUND_CUTOFF_HOURS=${XIANGWAN_CANCEL_FULL_REFUND_CUTOFF_HOURS:-}"
+      - "XIANGWAN_COUPON_REFUND_POLICY_VERSION=${XIANGWAN_COUPON_REFUND_POLICY_VERSION:-}"
+      - "XIANGWAN_COUPON_REFUND_DISPOSITION=${XIANGWAN_COUPON_REFUND_DISPOSITION:-}"
+      - "XIANGWAN_COUPON_GRANT_POLICY_PUBLIC_KEY=${XIANGWAN_COUPON_GRANT_POLICY_PUBLIC_KEY:-}"
+      - "XIANGWAN_CHECKIN_CREDENTIAL_HMAC_KEY=${XIANGWAN_CHECKIN_CREDENTIAL_HMAC_KEY:?set XIANGWAN_CHECKIN_CREDENTIAL_HMAC_KEY}"
+      - "XIANGWAN_CHECKIN_CREDENTIAL_TTL_SECONDS=${XIANGWAN_CHECKIN_CREDENTIAL_TTL_SECONDS:-600}"
+      - "XIANGWAN_ADMIN_ORIGIN=${XIANGWAN_ADMIN_ORIGIN:-}"
+      - "XIANGWAN_ADMIN_OIDC_ISSUER=${XIANGWAN_ADMIN_OIDC_ISSUER:-}"
+      - "XIANGWAN_ADMIN_OIDC_CLIENT_ID=${XIANGWAN_ADMIN_OIDC_CLIENT_ID:-}"
+      - "XIANGWAN_ADMIN_OIDC_CLIENT_SECRET=${XIANGWAN_ADMIN_OIDC_CLIENT_SECRET}"
+      - "XIANGWAN_ADMIN_OIDC_REDIRECT_URL=${XIANGWAN_ADMIN_OIDC_REDIRECT_URL:-}"
+      - "XIANGWAN_ADMIN_OIDC_REQUIRED_ACR=${XIANGWAN_ADMIN_OIDC_REQUIRED_ACR:-}"
+      - "XIANGWAN_ADMIN_OIDC_CA_FILE=${XIANGWAN_ADMIN_OIDC_CA_FILE:-}"
+      - "XIANGWAN_ADMIN_SESSION_KEY=${XIANGWAN_ADMIN_SESSION_KEY:-}"
+      - "XIANGWAN_WECHAT_PREPAY_ENABLED=${XIANGWAN_WECHAT_PREPAY_ENABLED:-false}"
+      - "XIANGWAN_WECHAT_PAY_CERT_SERIAL=${XIANGWAN_WECHAT_PAY_CERT_SERIAL:-}"
+      - "XIANGWAN_WECHAT_PAY_PRIVATE_KEY_FILE=${XIANGWAN_WECHAT_PAY_PRIVATE_KEY_FILE:-}"
+      - "XIANGWAN_WECHAT_PAY_PUBLIC_KEY_ID=${XIANGWAN_WECHAT_PAY_PUBLIC_KEY_ID:-}"
+      - "XIANGWAN_WECHAT_PAY_PUBLIC_KEY_FILE=${XIANGWAN_WECHAT_PAY_PUBLIC_KEY_FILE:-}"
+      - "XIANGWAN_WECHAT_PAY_API_V3_KEY=${XIANGWAN_WECHAT_PAY_API_V3_KEY:-}"
+      - "XIANGWAN_WECHAT_PAY_NOTIFY_URL=${XIANGWAN_WECHAT_PAY_NOTIFY_URL:-}"
+      - "XIANGWAN_WECHAT_PAY_DESCRIPTION=${XIANGWAN_WECHAT_PAY_DESCRIPTION:-}"
+      - "XIANGWAN_LISTEN_ADDRESS=:8080"
+      # Coolify assigns this service's Traefik route + TLS from the documented
+      # service FQDN convention. The value is a hostname without a scheme and
+      # the suffix binds the route to the container's internal port 8080.
+      - "SERVICE_FQDN_API_8080=${SERVICE_FQDN_API_8080:-}"
+      - "SERVER_TRUSTED_PROXIES=${SERVER_TRUSTED_PROXIES:-127.0.0.1,::1,172.16.0.0/12,10.0.0.0/8,192.168.0.0/16}"
+      - "STORAGE_LOCAL_DIR=/data/xiangwan"
+      - "APP_ENV=production"
+      - "GIN_MODE=release"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    ports:
+      - "127.0.0.1:${XIANGWAN_PUBLISHED_PORT:-8082}:8080"
+    volumes:
+      - xiangwan_media_data:/data/xiangwan
+      # XIANGWAN_ADMIN_OIDC_CA_FILE points at a customer-owned PEM for a
+      # private IdP. The image ships only the system CA bundle, so mount the
+      # file read-only at exactly that path before enabling the variable —
+      # a configured-but-missing CA fails startup by design. Example:
+      # - "${XIANGWAN_ADMIN_OIDC_CA_FILE:-./oidc-ca.pem}:/extra-certs/oidc-ca.pem:ro"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/ready"]
+      interval: 10s
+      timeout: 5s
+      start_period: 20s
+      retries: 12
+    stop_grace_period: 20s
+
+  migrate:
+    # One-shot on every deploy: the schema_migrations ledger makes sqlmigrate
+    # idempotent, so plain `docker compose up` always converges the schema
+    # before the API starts (no manual --profile step, no Coolify side app).
+    image: "${XIANGWAN_MIGRATE_IMAGE:?set XIANGWAN_MIGRATE_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan-migrate
+    restart: "no"
+    environment:
+      # Keep the migrator's credential separate from the API container. Set
+      # DATABASE_DSN in the private .env for this one-shot operation.
+      - "DATABASE_DSN=${DATABASE_DSN:?set DATABASE_DSN}"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    entrypoint:
+      - /bin/sh
+      - -ec
+      - |-
+        test -n "$$DATABASE_DSN" || { echo "DATABASE_DSN is required for migration" >&2; exit 64; }
+        exec /app/sqlmigrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  bootstrap:
+    # One-shot on every deploy: bootstrap-generation replays the stored
+    # tenant/generation pair without advancing the epoch, so re-running it is
+    # always safe. UUIDs are supplied up front by the deployment environment.
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    restart: "no"
+    command:
+      - bootstrap-generation
+      - --tenant-id
+      - "${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - --generation-id
+      - "${XIANGWAN_GENERATION_ID:?set XIANGWAN_GENERATION_ID}"
+      - --reason
+      - "compose deploy ${XIANGWAN_DEPLOY_REASON:-xiangwan release}"
+    environment:
+      - "DATABASE_DSN=${DATABASE_DSN:?set DATABASE_DSN}"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  admin-identity-seed:
+    # Optional one-shot (`--profile admin-seed`): bootstrap-generation
+    # provisions no Principal, identity link, or Grant, so a fresh database
+    # cannot complete any OIDC login until the first administrator is seeded.
+    # Fill XIANGWAN_ADMIN_SEED_ISSUER / _SUBJECT (the IdP account that will
+    # operate admin web) and run once; it replays safely. Enabling the profile
+    # without the identity variables fails the run — a skipped seed must not
+    # masquerade as successful provisioning (codex review 2026-09-19).
+    profiles: ["admin-seed"]
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    restart: "no"
+    entrypoint:
+      - /bin/sh
+      - -ec
+      - |-
+        if [ -z "$$XIANGWAN_ADMIN_SEED_ISSUER" ] || [ -z "$$XIANGWAN_ADMIN_SEED_SUBJECT" ]; then
+          echo "admin-seed profile enabled but XIANGWAN_ADMIN_SEED_ISSUER/_SUBJECT not set; refusing to skip" >&2
+          exit 64
+        fi
+        exec /app/xiangwan bootstrap-admin-identity \
+          --tenant-id "$$XIANGWAN_TENANT_ID" \
+          --issuer "$$XIANGWAN_ADMIN_SEED_ISSUER" \
+          --subject "$$XIANGWAN_ADMIN_SEED_SUBJECT" \
+          --nickname "$${XIANGWAN_ADMIN_SEED_NICKNAME:-}"
+    environment:
+      - "DATABASE_DSN=${DATABASE_DSN:?set DATABASE_DSN}"
+      - "XIANGWAN_TENANT_ID=${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - "XIANGWAN_ADMIN_SEED_ISSUER=${XIANGWAN_ADMIN_SEED_ISSUER:-}"
+      - "XIANGWAN_ADMIN_SEED_SUBJECT=${XIANGWAN_ADMIN_SEED_SUBJECT:-}"
+      - "XIANGWAN_ADMIN_SEED_NICKNAME=${XIANGWAN_ADMIN_SEED_NICKNAME:-}"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      bootstrap:
+        condition: service_completed_successfully
+
+  activate-generation:
+    # Run explicitly after migration, before restarting a changed generation.
+    # Bootstrap only verifies/replays an already-active matching pair.
+    profiles: ["generation-cutover"]
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    restart: "no"
+    command:
+      - activate-generation
+      - --expected-epoch
+      - "${XIANGWAN_EXPECTED_WRITE_EPOCH:-}"
+      - --generation-id
+      - "${XIANGWAN_GENERATION_ID:?set XIANGWAN_GENERATION_ID}"
+      - --reason
+      - "${XIANGWAN_DEPLOY_REASON:-xiangwan release}"
+    environment:
+      - "DATABASE_DSN=${XIANGWAN_ACTIVATION_DATABASE_DSN}"
+      - "XIANGWAN_TENANT_ID=${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  payment-close-worker:
+    profiles: ["worker", "payment-close"]
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    command: ["worker"]
+    restart: unless-stopped
+    environment:
+      - "XIANGWAN_PAYMENT_CLOSE_DATABASE_DSN=${XIANGWAN_PAYMENT_CLOSE_DATABASE_DSN}"
+      - "XIANGWAN_TENANT_ID=${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - "XIANGWAN_GENERATION_ID=${XIANGWAN_GENERATION_ID:?set XIANGWAN_GENERATION_ID}"
+      # This optional profile must remain parseable when payment is disabled.
+      # The worker's own strict config loader requires this complete group on start.
+      - "XIANGWAN_PAYMENT_CLOSE_MERCHANT_ID=${XIANGWAN_PAYMENT_CLOSE_MERCHANT_ID:-}"
+      - "XIANGWAN_PAYMENT_CLOSE_MERCHANT_CONFIG_GENERATION_ID=${XIANGWAN_PAYMENT_CLOSE_MERCHANT_CONFIG_GENERATION_ID:-}"
+      - "XIANGWAN_PAYMENT_CLOSE_APP_ID=${XIANGWAN_APP_ID:?set XIANGWAN_APP_ID}"
+      - "XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_CERT_SERIAL=${XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_CERT_SERIAL:-}"
+      - "XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_PRIVATE_KEY_FILE=${XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_PRIVATE_KEY_FILE:-}"
+      - "XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_PUBLIC_KEY_ID=${XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_PUBLIC_KEY_ID:-}"
+      - "XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_PUBLIC_KEY_FILE=${XIANGWAN_PAYMENT_CLOSE_WECHAT_PAY_PUBLIC_KEY_FILE:-}"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/app/xiangwan", "worker-health"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+    stop_grace_period: 30s
+
+  profile-moderation-worker:
+    profiles: ["worker", "profile-moderation"]
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    command: ["profile-moderation-worker"]
+    restart: unless-stopped
+    environment:
+      - "XIANGWAN_PROFILE_MODERATION_DATABASE_DSN=${XIANGWAN_PROFILE_MODERATION_DATABASE_DSN}"
+      - "XIANGWAN_TENANT_ID=${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - "XIANGWAN_GENERATION_ID=${XIANGWAN_GENERATION_ID:?set XIANGWAN_GENERATION_ID}"
+      - "XIANGWAN_APP_ID=${XIANGWAN_APP_ID:?set XIANGWAN_APP_ID}"
+      - "XIANGWAN_APP_SECRET=${XIANGWAN_APP_SECRET}"
+      - "APP_ENV=production"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/app/xiangwan", "profile-moderation-worker-health"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+    stop_grace_period: 30s
+
+  media-cleanup-worker:
+    profiles: ["worker", "media-cleanup"]
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    command: ["media-cleanup-worker"]
+    restart: unless-stopped
+    environment:
+      - "XIANGWAN_MEDIA_CLEANUP_DATABASE_DSN=${XIANGWAN_MEDIA_CLEANUP_DATABASE_DSN}"
+      - "XIANGWAN_TENANT_ID=${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - "XIANGWAN_GENERATION_ID=${XIANGWAN_GENERATION_ID:?set XIANGWAN_GENERATION_ID}"
+      - "STORAGE_LOCAL_DIR=/data/xiangwan"
+      - "APP_ENV=production"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    volumes:
+      - xiangwan_media_data:/data/xiangwan
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/app/xiangwan", "media-cleanup-worker-health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+    stop_grace_period: 30s
+
+  coupon-reconciliation-worker:
+    profiles: ["worker", "coupon-reconciliation"]
+    image: "${XIANGWAN_IMAGE:?set XIANGWAN_IMAGE}"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      target: xiangwan
+    command: ["coupon-reconciliation-worker"]
+    restart: unless-stopped
+    environment:
+      - "XIANGWAN_COUPON_RECONCILIATION_DATABASE_DSN=${XIANGWAN_COUPON_RECONCILIATION_DATABASE_DSN}"
+      - "XIANGWAN_TENANT_ID=${XIANGWAN_TENANT_ID:?set XIANGWAN_TENANT_ID}"
+      - "XIANGWAN_GENERATION_ID=${XIANGWAN_GENERATION_ID:?set XIANGWAN_GENERATION_ID}"
+      - "APP_ENV=production"
+      - "TZ=${TZ:-Asia/Shanghai}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/app/xiangwan", "coupon-reconciliation-worker-health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+    stop_grace_period: 30s
+
+volumes:
+  xiangwan_postgres_data:
+  xiangwan_media_data:

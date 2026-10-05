@@ -1,0 +1,26 @@
+<view class="page host-application-page">
+ <view wx:if="{{loading}}">正在加载申请信息…</view>
+ <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+ <view wx:if="{{notice}}">{{notice}}</view>
+ <t-button block theme="default" variant="outline" t-class="secondary-button form-submit" wx:if="{{pending}}" disabled="{{submitting}}" bindtap="retryPending">重试原请求</t-button>
+ <t-button block theme="default" variant="outline" t-class="secondary-button form-submit" wx:if="{{!pending}}" disabled="{{loading || submitting}}" bindtap="load">刷新申请信息</t-button>
+ <block wx:if="{{benefits}}">
+  <view class="section-heading">主理人规则</view>
+  <view wx:if="{{!benefits.hostRules.configured}}">社区尚未开放主理人申请</view>
+  <block wx:else><view>申请要求</view><view class="host-copy">{{benefits.hostRules.requirements}}</view><view>可获支持</view><view class="host-copy">{{benefits.hostRules.benefits}}</view></block>
+  <view wx:if="{{benefits.currentApplication}}">当前申请：{{benefits.currentApplication.statusLabel}}</view>
+  <t-button block theme="default" variant="outline" t-class="secondary-button form-submit" wx:if="{{benefits.currentApplication.status === 'pending'}}" disabled="{{submitting || pending}}" bindtap="withdraw">撤回申请</t-button>
+  <block wx:if="{{benefits.canApplyForHost}}">
+   <view>个人介绍 <text class="required-mark">*</text></view><textarea data-field="personal_introduction" value="{{personal_introduction}}" maxlength="4000" disabled="{{pending || submitting}}" bindinput="onInput"/>
+   <view>相关经验 <text class="required-mark">*</text></view><textarea data-field="relevant_experience" value="{{relevant_experience}}" maxlength="4000" disabled="{{pending || submitting}}" bindinput="onInput"/>
+   <view>可参与时间 <text class="required-mark">*</text></view><textarea data-field="availability" value="{{availability}}" maxlength="1000" disabled="{{pending || submitting}}" bindinput="onInput"/>
+   <view>联系方式 <text class="required-mark">*</text></view><input data-field="contact_method" value="{{contact_method}}" maxlength="500" disabled="{{pending || submitting}}" bindinput="onInput"/>
+   <view>资料仅用于主理人申请审核，不作为公开人物资料发布。</view>
+   <t-button block theme="default" variant="outline" t-class="secondary-button form-submit" bindtap="openPrivacy">查看隐私保护指引</t-button>
+   <checkbox-group bindchange="onConsent"><label><checkbox value="consent" checked="{{consent}}" disabled="{{pending || submitting}}"/>我确认当前规则，同意为申请审核收集以上资料</label></checkbox-group>
+   <t-button block theme="primary" t-class="primary-button form-submit" disabled="{{submitDisabled}}" bindtap="submit">{{submitting ? '正在提交…' : pending ? '重试原申请' : '提交申请'}}</t-button>
+  </block>
+  <view class="section-heading">申请记录</view>
+  <view wx:for="{{benefits.applicationHistory}}" wx:key="key"><view>{{item.cycle}} · {{item.statusLabel}}</view><view wx:if="{{item.reviewComment}}">审核意见：{{item.reviewComment}}</view></view>
+ </block>
+</view>

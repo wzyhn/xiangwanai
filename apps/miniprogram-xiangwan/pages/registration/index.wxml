@@ -1,0 +1,139 @@
+<view class="page form-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在准备报名表…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+  <view class="state-panel state-error registration-blocked" wx:elif="{{blockedMessage}}">
+    <view class="registration-blocked-icon">!</view>
+    <view class="registration-blocked-title">报名信息暂不可填写</view>
+    <view class="registration-blocked-message">{{blockedMessage}}</view>
+    <t-button block theme="default" variant="outline" shape="round" t-class="secondary-button registration-retry-button" bindtap="retry">重新检查</t-button>
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <!-- 原型 .registration-summary -->
+    <view class="registration-summary">
+      <view class="registration-summary-copy">
+        <text class="registration-summary-kicker">本次报名</text>
+        <text class="registration-summary-title">{{detail.title}}</text>
+        <text class="registration-summary-meta" wx:if="{{detail.sessionTitle && detail.sessionTitle !== detail.title}}">场次：{{detail.sessionTitle}}</text>
+        <text class="registration-summary-meta">{{detail.startAt}} 至 {{detail.endAt}}</text>
+        <text class="registration-summary-meta" wx:if="{{detail.deliveryMode === 'online'}}">{{detail.onlineMode || '线上参与'}}</text>
+        <text class="registration-summary-meta" wx:else>{{detail.venue || detail.area}}</text>
+      </view>
+      <view class="registration-summary-price">{{detail.price}}</view>
+    </view>
+
+    <view class="registration-profile">
+      <image wx:if="{{profileAvatarUrl}}" class="registration-avatar" src="{{profileAvatarUrl}}" mode="aspectFill" binderror="onProfileAvatarError" />
+      <view wx:else class="registration-avatar registration-avatar-initial">{{profileAvatarInitial}}</view>
+      <view class="registration-profile-copy"><view class="registration-profile-name">{{profileNickname || '报名用户'}}</view><view class="registration-profile-caption">使用当前账号报名</view></view>
+    </view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button policy-button" bindtap="openPoliciesPage">查看隐私与联系人政策 ›</t-button>
+
+    <view class="section-heading">报名信息</view>
+    <view class="field-label">昵称 <text class="required">*</text></view>
+    <t-input
+      t-class="text-input"
+      value="{{contactName}}"
+      maxlength="100"
+      placeholder="请输入昵称，方便现场称呼"
+      clearable
+      borderless="{{false}}"
+      bindchange="updateContactName"
+      bindclear="clearContactName"
+    />
+    <view class="field-error" wx:if="{{contactNameError}}">{{contactNameError}}</view>
+    <view class="field-label">手机号 <text class="required">*</text></view>
+    <t-input
+      t-class="text-input"
+      value="{{contactPhone}}"
+      type="text"
+      maxlength="24"
+      placeholder="中国大陆手机号或国际号码"
+      clearable
+      borderless="{{false}}"
+      bindchange="updateContactPhone"
+      bindclear="clearContactPhone"
+    />
+    <view class="field-help">手机号不做验证码校验，请确保手机号正确，活动通知会使用此号码。</view>
+    <view class="field-error" wx:if="{{contactPhoneError}}">{{contactPhoneError}}</view>
+    <t-checkbox-group
+      t-class="acknowledgement-row"
+      value="{{contactAcknowledged ? ['acknowledged'] : []}}"
+      options="{{contactAcknowledgementOptions}}"
+      borderless
+      bindchange="updateContactAcknowledgement"
+    />
+    <view class="field-error" wx:if="{{contactAcknowledgementError}}">{{contactAcknowledgementError}}</view>
+
+    <view class="field-help" wx:if="{{questionnaireLoading}}">正在加载活动问卷，请稍候…</view>
+    <block wx:if="{{fields.length}}">
+      <view class="section-heading">活动问卷</view>
+      <view class="field-help" wx:if="{{prefillNotice}}">{{prefillNotice}}</view>
+      <view class="privacy-purpose" wx:if="{{privacyPurpose}}">用途：{{privacyPurpose}}</view>
+      <view class="question-field" wx:for="{{fields}}" wx:key="field_id">
+        <view class="field-label">{{item.label}} <text class="required" wx:if="{{item.required}}">*</text></view>
+        <view class="field-help" wx:if="{{item.help_text}}">{{item.help_text}}</view>
+
+        <t-radio-group
+          wx:if="{{item.isChoice}}"
+          data-field-id="{{item.field_id}}"
+          value="{{item.selectedValue}}"
+          options="{{item.options}}"
+          keys="{{choiceKeys}}"
+          icon="line"
+          borderless
+          bindchange="updateChoiceAnswer"
+        />
+
+        <t-checkbox-group
+          wx:elif="{{item.isMultipleChoice}}"
+          data-field-id="{{item.field_id}}"
+          value="{{item.selectedValues}}"
+          options="{{item.options}}"
+          keys="{{choiceKeys}}"
+          borderless
+          bindchange="updateChoiceAnswer"
+        />
+
+        <t-textarea
+          wx:elif="{{item.isMultiline}}"
+          t-class="text-area"
+          value="{{item.answerText}}"
+          maxlength="{{item.max_length}}"
+          indicator
+          autosize="{{textareaAutosize}}"
+          data-field-id="{{item.field_id}}"
+          placeholder="请输入"
+          bindchange="updateTextAnswer"
+        />
+
+        <t-input
+          wx:elif="{{item.isSingleLine}}"
+          t-class="text-input"
+          value="{{item.answerText}}"
+          maxlength="{{item.max_length}}"
+          borderless="{{false}}"
+          data-field-id="{{item.field_id}}"
+          placeholder="请输入"
+          bindchange="updateTextAnswer"
+        />
+        <view class="field-error" wx:if="{{item.error}}">{{item.error}}</view>
+      </view>
+    </block>
+
+    <view class="form-error form-feedback" wx:if="{{formError}}">{{formError}}</view>
+    <view class="form-notice form-feedback" wx:if="{{formNotice}}">{{formNotice}}</view>
+    <view class="truth-note form-truth">下一步会请你核对信息，确认提交后才会完成报名。</view>
+    <view class="bottom-action-spacer"></view>
+    <view class="bottom-action form-bottom-action">
+      <view class="form-total">
+        <view class="form-total-label">本场费用</view>
+        <view class="form-total-value">{{detail.price}}</view>
+      </view>
+      <t-button block theme="primary" shape="rectangle" t-class="primary-button form-next-button" loading="{{continuing}}" disabled="{{continuing || questionnaireLoading}}" bindtap="continueToConfirmation">核对报名信息</t-button>
+    </view>
+  </block>
+</view>

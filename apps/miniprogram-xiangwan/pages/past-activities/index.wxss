@@ -1,0 +1,23 @@
+/* 往期活动页级样式：公共类在 app.wxss（原型 category-tabs/past-grid） */
+
+.past-page {
+  padding-top: 8rpx;
+}
+
+.past-series-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 28rpx 32rpx 14rpx;
+}
+
+.past-series-title {
+  color: #1d2a3a;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.past-series-count {
+  color: #8b98a8;
+  font-size: 24rpx;
+}

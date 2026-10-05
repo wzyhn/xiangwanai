@@ -1,0 +1,76 @@
+/* 我的页级样式：公共类在 app.wxss（原型 profile/menu-list） */
+
+.my-page {
+  padding-top: 0;
+}
+
+.state-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  min-height: 48rpx;
+  color: #8a96a8;
+  font-size: 21rpx;
+}
+
+.my-menu {
+  margin-top: 4rpx;
+}
+
+.my-menu-heading {
+  margin: 0;
+}
+
+.my-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 34rpx;
+}
+
+.my-section-link {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  color: #29476c;
+  font-size: 22rpx;
+}
+
+.booking-status {
+  margin-top: 20rpx;
+}
+
+.booking-status-placeholder {
+  color: #8d99a8;
+  font-size: 34rpx;
+}
+
+.booking-status-retry {
+  padding: 16rpx 0;
+  color: #913d50;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.profile-action {
+  display: flex;
+  flex: none;
+  align-items: center;
+  width: 40rpx;
+  justify-content: flex-end;
+}
+
+.menu-row-pressed {
+  background: #f6f8fb;
+}
+
+.profile-pressed {
+  opacity: 0.75;
+}
+
+/* <image> 头像复用 .profile-avatar 的 108rpx 圆形尺寸 */
+.profile-avatar-image {
+  display: block;
+  overflow: hidden;
+}

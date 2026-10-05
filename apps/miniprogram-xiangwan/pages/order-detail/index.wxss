@@ -1,0 +1,9 @@
+/* 订单详情页级样式：公共类在 app.wxss（原型 detail-list/status-banner） */
+
+.order-detail-page {
+  padding-top: 16rpx;
+}
+
+.payment-notice {
+  padding: 16rpx 0 4rpx;
+}

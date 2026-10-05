@@ -1,0 +1,33 @@
+<view class="page session-collection-page">
+  <view class="collection-heading">
+    <view class="eyebrow">{{heading.eyebrow}}</view>
+    <view class="detail-title collection-title">{{heading.title}}</view>
+    <view class="detail-instance">{{heading.subtitle}}</view>
+  </view>
+
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在加载活动场次…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" wx:if="{{canRetry}}" bindtap="retry">重新加载</t-button>
+  </view>
+  <view class="state-panel" wx:elif="{{emptyMessage}}"><t-empty description="{{emptyMessage}}" /></view>
+
+  <view class="session-choice-list" wx:elif="{{collection}}">
+    <view
+      wx:for="{{collection.sessions}}"
+      wx:key="sessionId"
+      class="session-choice-row"
+      data-session-id="{{item.sessionId}}"
+      bindtap="openSession"
+      hover-class="session-choice-pressed"
+    >
+      <view class="meta-icon"><t-icon name="calendar" size="28rpx" /></view>
+      <view class="session-choice-copy">
+        <view class="session-choice-title">{{item.label}}</view>
+        <view class="session-choice-time">{{item.startAt}}</view>
+      </view>
+      <view class="session-choice-status">{{item.statusLabel}}</view>
+      <view class="menu-row-arrow"><t-icon name="chevron-right" size="32rpx" /></view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,66 @@
+/* 身份与贡献页级样式：公共类在 app.wxss（原型 identity/booking-status/benefit） */
+
+.benefits-page {
+  padding-top: 20rpx;
+}
+
+.benefits-contribution-heading {
+  margin-top: 0;
+}
+
+.contribution-card {
+  margin-bottom: 36rpx;
+}
+
+.prototype-benefit-list {
+  margin-bottom: 10rpx;
+}
+
+.prototype-benefit-row {
+  align-items: flex-start;
+  padding: 24rpx 0;
+}
+
+.benefit-symbol {
+  width: 34rpx;
+  flex: none;
+  color: #10233f;
+  font-size: 30rpx;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.benefits-refreshing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  min-height: 48rpx;
+  color: #8a96a8;
+  font-size: 21rpx;
+}
+
+.booking-status-3 {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 8rpx;
+}
+
+.rule-label {
+  margin-top: 22rpx;
+  color: #4f6076;
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.rule-copy {
+  margin-top: 9rpx;
+  color: #31445e;
+  font-size: 23rpx;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.history-note {
+  text-align: center;
+}

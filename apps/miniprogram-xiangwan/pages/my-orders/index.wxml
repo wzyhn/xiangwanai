@@ -1,0 +1,63 @@
+<view class="page orders-page">
+  <view class="state-panel" wx:if="{{needsLogin}}">
+    <view>登录后查看自己的订单</view>
+    <t-button block theme="primary" shape="round" t-class="primary-button inline-action" loading="{{loading}}" bindtap="loginAndLoad">微信登录</t-button>
+    <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </view>
+
+  <block wx:else>
+    <!-- 原型 .category-tabs：下划线页签 -->
+    <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="category-tabs-scroll">
+      <view class="category-tabs">
+        <view
+          wx:for="{{stateFilters}}"
+          wx:key="value"
+          class="category-tab {{activeState === item.value ? 'category-tab-on' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="selectState"
+          hover-class="category-tab-pressed"
+        >{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="state-panel" wx:if="{{loading && !items.length}}"><t-loading theme="circular" size="40rpx" text="正在加载订单…" /></view>
+    <view class="state-panel state-error" wx:elif="{{errorMessage && !items.length}}">
+      <view>{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+    <view class="quiet-empty" wx:elif="{{emptyMessage}}">{{emptyMessage}}</view>
+    <view class="state-panel state-error" wx:if="{{errorMessage && items.length}}">
+      <view>当前仍展示上次成功加载的订单：{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+
+    <view
+      class="row-card"
+      wx:for="{{items}}"
+      wx:key="orderId"
+      data-order-id="{{item.orderId}}"
+      bindtap="openOrder"
+      hover-class="row-card-pressed"
+    >
+      <view class="row-card-head">
+        <view class="state-tag {{item.stateTone === 'alert' ? 'state-alert' : item.stateTone === 'warm' ? 'state-warm' : item.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{item.stateLabel}}</view>
+        <view class="link-more">查看详情 ›</view>
+      </view>
+      <view class="row-card-title">{{item.title}}</view>
+      <view class="row-card-sub" wx:if="{{item.sessionTitle && item.sessionTitle !== item.title}}">场次：{{item.sessionTitle}}</view>
+      <view class="row-card-sub" wx:if="{{item.seriesTitle}}">系列：{{item.seriesTitle}}</view>
+      <view class="event-line"><t-icon name="time" size="26rpx" color="#8b98a8" /><text>{{item.startAt}}</text></view>
+      <view class="event-line"><t-icon name="flag" size="26rpx" color="#8b98a8" /><text>{{item.outcomeLabel}}</text></view>
+      <view class="row-card-foot">
+        <view>
+          <text class="price">{{item.payableText}}</text>
+          <text class="price-note" wx:if="{{item.hasDiscount}}">已优惠 {{item.discountText}}</text>
+        </view>
+        <view class="row-card-sub">更新 {{item.lastBusinessAt}}</view>
+      </view>
+    </view>
+
+    <view class="list-footer" wx:if="{{loadingMore}}">正在加载更多…</view>
+    <view class="list-footer" wx:elif="{{items.length && !nextCursor}}">已展示全部订单</view>
+  </block>
+</view>

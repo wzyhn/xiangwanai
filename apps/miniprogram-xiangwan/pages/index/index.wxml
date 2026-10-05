@@ -1,0 +1,227 @@
+<view class="page home-page">
+  <view class="home-hero {{heroMode === 'image' && heroImageUrl && !heroImageFailed ? 'home-hero-with-image' : ''}}">
+  <image
+    wx:if="{{heroMode === 'image' && heroImageUrl && !heroImageFailed}}"
+    class="brand-hero-image"
+    src="{{heroImageUrl}}"
+    mode="aspectFill"
+    aria-label="{{heroImageAlt}}"
+    binderror="onHeroImageError"
+  />
+
+  <!-- 已配置的文字叠在图片左下角；空值不占位。 -->
+  <view class="home-intro" wx:if="{{heroEyebrow || communityName || heroSubtitle || brandIntro}}">
+    <view class="eyebrow" wx:if="{{heroEyebrow}}">{{heroEyebrow}}</view>
+    <view class="home-brand-line" wx:if="{{communityName || heroSubtitle}}">
+      <view class="home-title" wx:if="{{communityName}}">{{communityName}}</view>
+      <view class="home-kicker" wx:if="{{heroSubtitle}}">{{heroSubtitle}}</view>
+    </view>
+    <view class="home-slogan" wx:if="{{brandIntro}}">{{brandIntro}}</view>
+  </view>
+  </view>
+  <view class="home-people-link" bindtap="openPeople" hover-class="home-people-link-pressed">
+    认识社区人物 <t-icon name="chevron-right" size="28rpx" color="#10233f" />
+  </view>
+
+  <!-- 原型 .primary-filters：三个筛选丸 + 白底浮层菜单 -->
+  <view class="primary-filters">
+    <view class="filter-dropdown {{activeFilterMenu === 'activity' ? 'filter-dropdown-open' : ''}}">
+      <view class="filter-trigger" aria-label="筛选类型：{{activityFilterLabel}}" data-key="activity" bindtap="toggleFilterMenu" hover-class="filter-trigger-pressed">
+        <view class="filter-trigger-copy">
+          <text class="filter-trigger-value">{{activityFilterLabel}}</text>
+        </view>
+        <t-icon name="chevron-down" size="28rpx" color="#526174" />
+      </view>
+      <view class="filter-menu" wx:if="{{activeFilterMenu === 'activity'}}">
+        <scroll-view scroll-y class="filter-menu-scroll">
+          <view
+            wx:for="{{activityFilters}}"
+            wx:key="value"
+            class="filter-option {{filter.activityType === item.value ? 'filter-option-selected' : ''}}"
+            data-value="{{item.value}}"
+            bindtap="selectActivity"
+          >
+            <text>{{item.label}}</text>
+            <t-icon wx:if="{{filter.activityType === item.value}}" name="check" size="28rpx" color="#10233f" />
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+
+    <view class="filter-dropdown {{activeFilterMenu === 'area' ? 'filter-dropdown-open' : ''}}">
+      <view class="filter-trigger" aria-label="筛选区域：{{areaFilterLabel}}" data-key="area" bindtap="toggleFilterMenu" hover-class="filter-trigger-pressed">
+        <view class="filter-trigger-copy">
+          <text class="filter-trigger-value">{{areaFilterLabel}}</text>
+        </view>
+        <t-icon name="chevron-down" size="28rpx" color="#526174" />
+      </view>
+      <view class="filter-menu" wx:if="{{activeFilterMenu === 'area'}}">
+        <scroll-view scroll-y class="filter-menu-scroll">
+          <view
+            wx:for="{{areaFilters}}"
+            wx:key="value"
+            class="filter-option {{filter.area === item.value ? 'filter-option-selected' : ''}}"
+            data-value="{{item.value}}"
+            bindtap="selectArea"
+          >
+            <text>{{item.label}}</text>
+            <t-icon wx:if="{{filter.area === item.value}}" name="check" size="28rpx" color="#10233f" />
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+
+    <view class="filter-dropdown {{activeFilterMenu === 'time' ? 'filter-dropdown-open' : ''}}">
+      <view class="filter-trigger" aria-label="筛选时间：{{timeFilterLabel}}" data-key="time" bindtap="toggleFilterMenu" hover-class="filter-trigger-pressed">
+        <view class="filter-trigger-copy">
+          <text class="filter-trigger-value">{{timeFilterLabel}}</text>
+        </view>
+        <t-icon name="chevron-down" size="28rpx" color="#526174" />
+      </view>
+      <view class="filter-menu" wx:if="{{activeFilterMenu === 'time'}}">
+        <scroll-view scroll-y class="filter-menu-scroll">
+          <view
+            wx:for="{{timeFilters}}"
+            wx:key="value"
+            class="filter-option {{filter.timeWindow === item.value ? 'filter-option-selected' : ''}}"
+            data-value="{{item.value}}"
+            bindtap="selectTime"
+          >
+            <text>{{item.label}}</text>
+            <t-icon wx:if="{{filter.timeWindow === item.value}}" name="check" size="28rpx" color="#10233f" />
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 原型 .topics：快捷标签丸 -->
+  <scroll-view wx:if="{{quickTags.length}}" class="topics" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="topics-inner">
+      <view
+        class="topic-pill {{!filter.quickTags.length ? 'topic-pill-on' : ''}}"
+        bindtap="clearQuickTags"
+        hover-class="topic-pill-pressed"
+      >全部</view>
+      <view
+        wx:for="{{quickTags}}"
+        wx:key="code"
+        class="topic-pill {{item.selected ? 'topic-pill-on' : ''}}"
+        data-code="{{item.code}}"
+        bindtap="toggleQuickTag"
+        hover-class="topic-pill-pressed"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <t-calendar
+    visible="{{calendarVisible}}"
+    value="{{calendarValue}}"
+    min-date="{{calendarMinDate}}"
+    max-date="{{calendarMaxDate}}"
+    type="single"
+    use-popup
+    auto-close
+    title="选择活动日期"
+    confirm-btn="确定"
+    bindconfirm="selectLocalDate"
+    bindclose="closeDatePicker"
+  />
+
+  <!-- 原型 .section-title -->
+  <view class="section-title" wx:if="{{cards.length}}">
+    <view class="section-title-main">全部活动</view>
+    <view class="section-title-side">{{openCount !== null ? openCount + ' 场开放报名' : cards.length + ' 场活动'}}</view>
+  </view>
+
+  <view class="state-panel" wx:if="{{loading && !cards.length}}"><t-loading theme="circular" size="40rpx" text="正在加载活动…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage && !cards.length}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+  <view class="state-panel" wx:elif="{{emptyMessage}}"><t-empty description="{{emptyMessage}}" /></view>
+  <view class="state-panel state-error" wx:if="{{errorMessage && cards.length}}">
+    <view>网络有些波动，已为你保留上次成功加载的活动，内容可能不符合刚选择的筛选。{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <!-- 原型 .event-row：左海报右内容 -->
+  <view class="feed">
+    <view
+      wx:for="{{cards}}"
+      wx:key="sessionId"
+      class="event-row"
+      data-session-id="{{item.sessionId}}"
+      bindtap="openDetail"
+      hover-class="event-row-pressed"
+    >
+      <view class="event-poster {{item.activityType === 'AI 圆桌' ? 'event-poster-yellow' : item.activityType === '课程' ? 'event-poster-blue' : item.activityType === '赛事' ? 'event-poster-green' : 'event-poster-pink'}}">
+        <image
+          wx:if="{{item.coverImageUrl}}"
+          class="event-poster-image"
+          src="{{item.coverImageUrl}}"
+          mode="aspectFill"
+          data-session-id="{{item.sessionId}}"
+          binderror="onCoverImageError"
+        />
+        <text wx:else class="event-poster-text">{{item.activityType === 'AI 圆桌' ? 'AI圆桌派' : item.activityType === '特别活动' ? '专题活动' : item.activityType}}</text>
+      </view>
+      <view class="event-info">
+        <view class="tag {{item.activityType === 'AI 圆桌' ? 'tag-yellow' : item.activityType === '课程' ? 'tag-blue' : item.activityType === '赛事' ? 'tag-green' : 'tag-pink'}}">{{item.activityType === 'AI 圆桌' ? 'AI圆桌派' : item.activityType === '特别活动' ? '专题活动' : item.activityType}}</view>
+        <view class="event-title">{{item.title}}</view>
+        <view class="event-session" wx:if="{{item.sessionTitle && item.sessionTitle !== item.title}}">场次：{{item.sessionTitle}}</view>
+        <view class="event-line">
+          <t-icon name="time" size="26rpx" color="#8b98a8" />
+          <view class="event-schedule" wx:if="{{item.scheduleDateText}}">
+            <text>{{item.scheduleDateText}}</text>
+            <text class="event-schedule-time">{{item.scheduleTimeText}}</text>
+          </view>
+          <text wx:else>{{item.startAt}} — {{item.endAt}}</text>
+        </view>
+        <view class="event-line">
+          <t-icon name="location" size="26rpx" color="#8b98a8" />
+          <text>{{item.location}}</text>
+        </view>
+        <view class="event-foot">
+          <view class="event-social">
+        <view class="event-participants" wx:if="{{item.participantAvatars.length || item.participantCount}}">
+          <view class="avatar-stack" wx:if="{{item.participantAvatars.length}}">
+          <image
+            wx:for="{{item.participantAvatars}}"
+            wx:for-item="avatar"
+            wx:key="*this"
+            class="event-participant-avatar"
+            style="{{index > 0 ? 'margin-left: -12rpx; ' : ''}}z-index: {{item.participantAvatars.length - index}};"
+            src="{{avatar}}"
+            mode="aspectFill"
+            data-session-id="{{item.sessionId}}" data-kind="participantAvatars" data-url="{{avatar}}" binderror="onSocialAvatarError"
+          />
+          </view>
+          <text class="event-foot-note">{{item.participantCountText}}</text>
+        </view>
+          <view class="event-want" wx:if="{{item.favoriteAvatars.length || item.currentFavoriteUsers !== null}}">
+            <view class="avatar-stack" wx:if="{{item.favoriteAvatars.length}}">
+              <image
+                wx:for="{{item.favoriteAvatars}}"
+                wx:for-item="avatar"
+                wx:key="*this"
+                class="stack-avatar"
+                style="{{index > 0 ? 'margin-left: -12rpx; ' : ''}}z-index: {{item.favoriteAvatars.length - index}};"
+                src="{{avatar}}"
+                mode="aspectFill"
+                data-session-id="{{item.sessionId}}" data-kind="favoriteAvatars" data-url="{{avatar}}" binderror="onSocialAvatarError"
+              />
+            </view>
+            <text class="event-foot-note">{{item.wantText}}</text>
+          </view>
+          <text class="event-foot-note" wx:else>{{item.heatText || item.remainingText}}</text>
+          </view>
+          <view class="event-cta">{{item.ctaLabel}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-footer" wx:if="{{loadingMore}}">正在加载更多…</view>
+  <view class="list-footer" wx:elif="{{cards.length && !nextCursor}}">已展示全部活动</view>
+</view>

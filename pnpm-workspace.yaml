@@ -1,0 +1,4 @@
+packages:
+  - apps/miniprogram-xiangwan
+  - apps/xiangwan-admin-web
+  - packages/*

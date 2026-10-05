@@ -1,0 +1,69 @@
+<view class="page past-page">
+  <!-- 原型 .category-tabs：下划线页签 -->
+  <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="category-tabs-scroll">
+    <view class="category-tabs">
+      <view
+        wx:for="{{activityFilters}}"
+        wx:key="value"
+        class="category-tab {{filter.activityType === item.value ? 'category-tab-on' : ''}}"
+        data-value="{{item.value}}"
+        bindtap="selectActivity"
+        hover-class="category-tab-pressed"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="state-panel" wx:if="{{loading && !items.length}}"><t-loading theme="circular" size="40rpx" text="正在加载往期活动…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage && !items.length}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+  <view class="quiet-empty" wx:elif="{{emptyMessage}}">{{emptyMessage}}</view>
+  <view class="state-panel state-error" wx:if="{{errorMessage && items.length}}">
+    <view>当前仍展示上次成功加载的往期活动；这些内容可能不符合刚选择的分类：{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <!-- 原型 .past-grid：双列海报卡 -->
+  <block wx:for="{{seriesGroups}}" wx:for-item="seriesGroup" wx:key="seriesId">
+    <view class="past-series-heading">
+      <view class="past-series-title">{{seriesGroup.seriesTitle}}</view>
+      <view class="past-series-count">已加载 {{seriesGroup.items.length}} 期</view>
+    </view>
+    <view class="past-grid">
+      <view
+        wx:for="{{seriesGroup.items}}"
+        wx:for-item="item"
+        wx:key="instanceId"
+        class="past-card"
+        data-instance-id="{{item.instanceId}}"
+        bindtap="openReview"
+        hover-class="past-card-pressed"
+      >
+        <view class="past-card-cover {{item.activityType === 'AI 圆桌' ? 'event-poster-yellow' : item.activityType === '课程' ? 'event-poster-blue' : item.activityType === '赛事' ? 'event-poster-green' : 'event-poster-pink'}}">
+          <image
+            wx:if="{{item.coverImageUrl}}"
+            class="past-card-cover-image"
+            src="{{item.coverImageUrl}}"
+            mode="aspectFill"
+            data-instance-id="{{item.instanceId}}"
+            binderror="onPastCoverImageError"
+          />
+          <text wx:else class="past-card-cover-text">{{item.activityType === 'AI 圆桌' ? 'AI圆桌派' : item.activityType === '特别活动' ? '专题活动' : item.activityType}}</text>
+        </view>
+        <view class="past-card-body">
+          <view class="tag {{item.activityType === 'AI 圆桌' ? 'tag-yellow' : item.activityType === '课程' ? 'tag-blue' : item.activityType === '赛事' ? 'tag-green' : 'tag-pink'}}">{{item.activityType === 'AI 圆桌' ? 'AI圆桌派' : item.activityType === '特别活动' ? '专题活动' : item.activityType}}</view>
+          <view class="past-card-title">{{item.instanceTitle}}</view>
+          <view class="past-card-date">{{item.completedAt}}</view>
+          <view class="past-card-stats">
+            <text>{{item.statusLabel}}</text>
+            <text wx:if="{{item.historyText}}">{{item.historyText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view class="list-footer" wx:if="{{loadingMore}}">正在加载更多…</view>
+  <view class="list-footer" wx:elif="{{items.length && !nextCursor}}">已展示全部往期活动</view>
+</view>

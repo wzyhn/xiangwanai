@@ -1,0 +1,22 @@
+.host-application-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+.host-application-page textarea {
+  width: 100%;
+  min-height: 160rpx;
+  background: #fff;
+  padding: 16rpx;
+  box-sizing: border-box;
+}
+.host-application-page input {
+  background: #fff;
+  padding: 16rpx;
+}
+.host-copy {
+  white-space: pre-wrap;
+}
+.required-mark {
+  color: #b91c1c;
+}

@@ -1,0 +1,190 @@
+<view class="page review-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在加载活动回顾…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <block wx:elif="{{review}}">
+    <!-- 原型 pastDetail 通栏回顾头部 -->
+    <image
+      wx:if="{{review.heroImageUrl}}"
+      class="review-hero-image"
+      src="{{review.heroImageUrl}}"
+      mode="aspectFill"
+      data-media-kind="hero"
+      binderror="handleMediaError"
+    />
+    <view class="review-hero">
+      <view class="review-hero-kicker">{{review.activityType}}</view>
+      <view class="review-hero-title">{{review.instanceTitle}}</view>
+      <view class="review-hero-series" wx:if="{{review.seriesTitle !== review.instanceTitle}}">{{review.seriesTitle}}</view>
+      <view class="review-hero-meta">{{review.completedAt}}</view>
+    </view>
+
+    <view class="review-stats" wx:if="{{review.historyText}}">{{review.historyText}}</view>
+    <view class="review-instance-content" wx:if="{{review.contentBlocks.length}}">
+      <view class="review-section-title">活动详情</view>
+      <block wx:for="{{review.contentBlocks}}" wx:for-item="block" wx:key="index">
+        <view wx:if="{{block.isText}}" class="review-instance-text">
+          <view wx:if="{{block.title}}" class="review-instance-text-title">{{block.title}}</view>
+          <view class="review-text">{{block.body}}</view>
+        </view>
+        <view wx:elif="{{block.isImage}}" class="review-instance-image-wrap">
+          <image class="review-image" src="{{block.imageUrl}}" mode="widthFix" lazy-load binderror="handleMediaError" />
+          <view wx:if="{{block.caption}}" class="review-instance-image-caption">{{block.caption}}</view>
+        </view>
+      </block>
+    </view>
+    <t-button block theme="default" variant="outline" shape="rectangle"
+      t-class="secondary-button session-resource-button"
+      wx:if="{{showSessionResources}}"
+      bindtap="openSessionResources"
+    >查看各场次资料</t-button>
+    <view class="state-panel state-error resource-error" wx:if="{{resourceErrorMessage}}">{{resourceErrorMessage}}</view>
+    <view class="quiet-empty" wx:if="{{!review.documents.length && !review.contentBlocks.length}}">本期回顾内容正在整理</view>
+
+    <!-- 文档按原型的内容小节排版：回顾、照片、视频、资料、复盘。未知文档仍保留通用资源渲染。 -->
+    <view
+      wx:for="{{review.documents}}"
+      wx:for-item="document"
+      wx:key="relationId"
+      class="review-document review-document-{{document.kind}}"
+    >
+      <view class="review-section-title">{{document.title}}</view>
+
+      <view wx:if="{{document.kind === 'photos'}}" class="review-photo-grid">
+        <block wx:for="{{document.blocks}}" wx:for-item="block" wx:key="blockId">
+          <image
+            wx:if="{{block.available && block.isImage && block.mediaUrl}}"
+            class="review-photo"
+            src="{{block.mediaUrl}}"
+            mode="aspectFill"
+            lazy-load
+            binderror="handleMediaError"
+          />
+          <view wx:elif="{{!block.available}}" class="resource-unavailable">{{block.unavailableText || '该资源暂不可访问'}}</view>
+          <view wx:else class="resource-unavailable">图片地址暂不可用</view>
+        </block>
+      </view>
+
+      <block wx:elif="{{document.kind === 'video'}}">
+        <block wx:for="{{document.blocks}}" wx:for-item="block" wx:key="blockId">
+          <video
+            wx:if="{{block.available && block.isVideo && block.mediaUrl}}"
+            class="review-video"
+            src="{{block.mediaUrl}}"
+            poster="{{review.heroImageUrl}}"
+            controls
+            show-center-play-btn
+            binderror="handleMediaError"
+          />
+          <t-button block theme="default" variant="outline" shape="rectangle"
+            wx:elif="{{block.available && block.isExternalLink && block.externalUrl}}"
+            t-class="secondary-button resource-button"
+            data-block-id="{{block.blockId}}"
+            bindtap="openExternalResource"
+          >{{block.label || '打开视频号'}}</t-button>
+          <view wx:elif="{{block.available && block.isText}}" class="review-text">{{block.text}}</view>
+          <view wx:elif="{{block.available}}" class="resource-unavailable">媒体地址暂不可用</view>
+          <view wx:else class="resource-unavailable">{{block.unavailableText || '该资源暂不可访问'}}</view>
+        </block>
+      </block>
+
+      <block wx:elif="{{document.kind === 'audio' || document.kind === 'resources'}}">
+        <block wx:for="{{document.blocks}}" wx:for-item="block" wx:key="blockId">
+          <view class="review-resource-row" wx:if="{{block.available && (block.isAudio || block.isExternalLink || block.isDownload)}}">
+            <view class="review-resource-icon">{{block.isAudio ? '♬' : '▤'}}</view>
+            <view class="review-resource-copy">
+              <view class="review-resource-title">{{block.label}}</view>
+            <view class="review-resource-note">{{block.subtitle || (block.isAudio ? '活动内容音频' : '公开活动资料')}}</view>
+            </view>
+            <t-icon name="chevron-right" size="28rpx" color="#8b98a8" />
+          </view>
+          <audio
+            wx:if="{{block.available && block.isAudio && block.mediaUrl}}"
+            class="review-audio"
+            src="{{block.mediaUrl}}"
+            name="{{block.label}}"
+            author="享玩 AI"
+            controls
+            binderror="handleMediaError"
+          />
+          <t-button block theme="default" variant="outline" shape="rectangle"
+            wx:if="{{block.available && block.isExternalLink && block.externalUrl}}"
+            t-class="secondary-button resource-button"
+            data-block-id="{{block.blockId}}"
+            bindtap="openExternalResource"
+          >打开资料</t-button>
+          <t-button block theme="default" variant="outline" shape="rectangle"
+            wx:if="{{block.available && block.isDownload && block.mediaUrl}}"
+            t-class="secondary-button resource-button"
+            data-url="{{block.mediaUrl}}"
+            bindtap="openMediaResource"
+          >下载资料</t-button>
+          <view wx:if="{{block.available && block.isText}}" class="review-text">{{block.text}}</view>
+          <view wx:if="{{block.available && ((block.isAudio && !block.mediaUrl) || (block.isExternalLink && !block.externalUrl) || (block.isDownload && !block.mediaUrl) || (!block.isAudio && !block.isExternalLink && !block.isDownload && !block.isText))}}" class="resource-unavailable">资源地址暂不可用</view>
+          <view wx:if="{{!block.available}}" class="resource-unavailable">{{block.unavailableText || '该资源暂不可访问'}}</view>
+        </block>
+      </block>
+
+      <block wx:else>
+        <view
+          wx:for="{{document.blocks}}"
+          wx:for-item="block"
+          wx:key="blockId"
+          class="review-block"
+        >
+          <video
+            wx:if="{{block.available && block.isVideo && block.mediaUrl}}"
+            class="review-video"
+            src="{{block.mediaUrl}}"
+            poster="{{review.heroImageUrl}}"
+            controls
+            show-center-play-btn
+            binderror="handleMediaError"
+          />
+          <audio
+            wx:elif="{{block.available && block.isAudio && block.mediaUrl}}"
+            class="review-audio"
+            src="{{block.mediaUrl}}"
+            name="{{block.label}}"
+            author="享玩 AI"
+            controls
+            binderror="handleMediaError"
+          />
+          <t-button block theme="default" variant="outline" shape="rectangle"
+            wx:elif="{{block.available && block.isExternalLink && block.externalUrl}}"
+            t-class="secondary-button resource-button"
+            data-block-id="{{block.blockId}}"
+            bindtap="openExternalResource"
+          >{{block.label || '打开资料'}}</t-button>
+          <t-button block theme="default" variant="outline" shape="rectangle"
+            wx:elif="{{block.available && block.isDownload && block.mediaUrl}}"
+            t-class="secondary-button resource-button"
+            data-url="{{block.mediaUrl}}"
+            bindtap="openMediaResource"
+          >下载资料</t-button>
+          <view class="review-text" wx:elif="{{block.available && block.isText}}">{{block.text}}</view>
+          <image
+            wx:elif="{{block.available && block.isImage && block.mediaUrl}}"
+            class="review-image"
+            src="{{block.mediaUrl}}"
+            mode="widthFix"
+            lazy-load
+            binderror="handleMediaError"
+          />
+          <view wx:else class="resource-unavailable">{{block.unavailableText || '资源地址暂不可用'}}</view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 原型 next-panel -->
+    <view class="next-instance" wx:if="{{review.nextInstance.available}}">
+      <view class="next-kicker">下一期已开放报名</view>
+      <view class="next-instance-title">{{review.nextInstance.label === '选择下一期场次' ? '请选择下一期场次' : review.instanceTitle}}</view>
+      <view class="next-copy">按实际场次查看时间、地点和报名状态。</view>
+      <t-button block theme="primary" shape="rectangle" t-class="primary-button next-button" bindtap="openNextInstance">{{review.nextInstance.label}}</t-button>
+    </view>
+  </block>
+</view>

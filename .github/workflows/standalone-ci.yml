@@ -1,0 +1,61 @@
+name: Standalone CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: standalone-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  go-and-schema:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: xiangwan
+          POSTGRES_PASSWORD: example
+          POSTGRES_DB: xiangwan_ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U xiangwan -d xiangwan_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      XIANGWAN_TEST_DATABASE_DSN: postgres://xiangwan:example@localhost:5432/xiangwan_ci?sslmode=disable
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: go.mod
+      - run: go test ./...
+      - run: go build ./cmd/xiangwan ./cmd/sqlmigrate
+      - run: docker build --target xiangwan -t xiangwan:ci .
+      - run: docker build --target xiangwan-migrate -t xiangwan-migrate:ci .
+  clients:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      XIANGWAN_ADMIN_API_ORIGIN: http://localhost:8080
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        with:
+          version: 10.8.0
+          run_install: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm --filter xiangwan-admin-web lint
+      - run: pnpm --filter xiangwan-admin-web typecheck
+      - run: pnpm --filter xiangwan-admin-web build
+        env:
+          XIANGWAN_ADMIN_API_ORIGIN: http://localhost:8080
+      - run: docker build -f apps/xiangwan-admin-web/Dockerfile --build-arg XIANGWAN_ADMIN_API_ORIGIN=http://api:8080 -t xiangwan-admin:ci .

@@ -1,0 +1,33 @@
+<view class="page people-page">
+  <view class="state-panel" wx:if="{{loading && !items.length}}"><t-loading theme="circular" size="40rpx" text="正在加载社区人物…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage && !items.length}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+  <view class="quiet-empty" wx:elif="{{emptyMessage}}">{{emptyMessage}}</view>
+  <view class="state-panel state-error" wx:if="{{errorMessage && items.length}}">
+    <view>当前仍展示上次成功加载的人物资料：{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <!-- 原型 person-modal 行式：圆头像 + 名称 + 简介 -->
+  <view
+    class="person-row"
+    wx:for="{{items}}"
+    wx:key="peopleId"
+    data-people-id="{{item.peopleId}}"
+    bindtap="openPerson"
+    hover-class="person-row-pressed"
+  >
+    <view class="avatar-circle person-avatar">{{item.avatarText}}</view>
+    <view class="person-content">
+      <view class="person-name">{{item.displayName}}</view>
+      <view class="person-headline" wx:if="{{item.headline}}">{{item.headline}}</view>
+      <view class="person-intro" wx:if="{{item.introductionSummary}}">{{item.introductionSummary}}</view>
+    </view>
+    <view class="menu-row-arrow"><t-icon name="chevron-right" size="32rpx" color="#aab4c1" /></view>
+  </view>
+
+  <view class="list-footer" wx:if="{{loadingMore}}">正在加载更多…</view>
+  <view class="list-footer" wx:elif="{{items.length && !nextCursor}}">已展示全部人物<text wx:if="{{asOf}}"> · 截至 {{asOf}}</text></view>
+</view>

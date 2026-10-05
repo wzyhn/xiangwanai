@@ -1,0 +1,12 @@
+<view class="page" wx:if="{{loading}}">
+  <view class="state-panel">正在核验外部资源…</view>
+</view>
+<view class="page" wx:elif="{{errorMessage}}">
+  <view class="state-panel state-error">{{errorMessage}}</view>
+  <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新核验</t-button>
+</view>
+<view class="page" wx:elif="{{videoChannel}}">
+  <view class="state-panel">本期视频回顾</view>
+  <t-button block theme="primary" bindtap="openVideoChannel">打开本期视频号回顾</t-button>
+</view>
+<web-view wx:else src="{{url}}"></web-view>

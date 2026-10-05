@@ -1,0 +1,96 @@
+<view class="page my-profile-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在读取资料…" /></view>
+
+  <!-- 未登录：仅提示 + 返回（资料页不承载登录动作） -->
+  <view class="state-panel" wx:elif="{{needsLogin}}">
+    <view>请先登录</view>
+    <t-button block theme="primary" shape="rectangle" t-class="primary-button inline-action" bindtap="goBack">返回</t-button>
+    <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </view>
+
+  <block wx:else>
+    <view class="profile-edit-heading">
+      <view class="section-heading">个人资料</view>
+      <view class="profile-edit-intro">头像和昵称用于享玩页面中的个人展示，方便你管理自己的资料。</view>
+    </view>
+
+    <!-- 头像：chooseAvatar 按钮取微信头像临时路径,选中即上传 -->
+    <view class="profile-edit-row">
+      <button
+        class="profile-avatar-button"
+        open-type="chooseAvatar"
+        bindchooseavatar="onChooseAvatar"
+        disabled="{{avatarUploading || saving || !profileReady}}"
+        aria-label="更换头像"
+      >
+        <image
+          wx:if="{{avatarUrl && !avatarFailed}}"
+          class="profile-avatar profile-avatar-image"
+          src="{{avatarUrl}}"
+          data-url="{{avatarUrl}}"
+          mode="aspectFill"
+          binderror="onAvatarError"
+        />
+        <view wx:else class="profile-avatar">{{avatarInitial}}</view>
+        <view class="profile-avatar-mask" wx:if="{{avatarUploading}}">
+          <t-loading theme="circular" size="36rpx" />
+        </view>
+      </button>
+      <view class="profile-edit-copy">
+        <view class="profile-edit-title">头像</view>
+        <view class="profile-edit-note">点击更换头像 · 图片会先审核</view>
+      </view>
+    </view>
+
+    <t-button block wx:if="{{avatarFailed}}" theme="primary" variant="text" size="small" t-class="text-button" bindtap="retryAvatar">头像加载失败，重新读取</t-button>
+
+    <!-- 昵称：微信昵称键盘 + 本地 1–64 字符校验 -->
+    <view class="field-label">昵称</view>
+    <input
+      class="text-input"
+      type="nickname"
+      value="{{nickname}}"
+      placeholder="请输入昵称"
+      maxlength="64"
+      disabled="{{saving || avatarUploading || !profileReady}}"
+      bindinput="onNicknameInput"
+    />
+    <view class="field-hint">支持 1–64 个字符，建议使用方便现场称呼的名字</view>
+    <view class="field-error" wx:if="{{nicknameError}}">{{nicknameError}}</view>
+    <view class="state-panel state-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+    <view class="profile-save-action">
+      <t-button
+        theme="primary"
+        block
+        shape="rectangle"
+        t-class="primary-button profile-save-button"
+        loading="{{saving}}"
+        disabled="{{saving || avatarUploading || !profileReady || !canSave}}"
+        bindtap="saveNickname"
+      >{{saving ? '正在保存…' : !profileReady ? '暂时无法保存' : canSave ? (avatarChanged ? '完成' : '保存资料') : '资料已是最新'}}</t-button>
+    </view>
+    <view class="saved-message" wx:if="{{savedMessage}}">{{savedMessage}}</view>
+
+    <view class="profile-extension">
+      <view class="section-heading">报名手机号</view>
+      <view class="field-hint">仅本人可见，报名时自动填写。手机号不做验证码校验，请确保手机号正确。</view>
+      <view wx:if="{{contactLoading}}">正在读取…</view>
+      <view wx:elif="{{contactPhone}}">{{contactPhone}}</view>
+      <view class="field-error" wx:if="{{contactError}}">{{contactError}}</view>
+      <t-button block theme="default" variant="outline" t-class="secondary-button" disabled="{{saving || avatarUploading}}" bindtap="editRegistrationContact">修改报名资料</t-button>
+    </view>
+    <view class="profile-extension">
+      <view class="section-heading">标签与简介</view>
+      <view class="profile-edit-intro">新提交的标签和简介默认仅自己可见。</view>
+      <view class="field-label">个人标签（选填）</view>
+      <t-input value="{{extensionTagsText}}" maxlength="280" placeholder="用逗号分隔，最多 8 个" disabled="{{extensionSaving || extensionLoading || !extensionReady}}" borderless="{{false}}" bindchange="onExtensionTagsInput" />
+      <view class="field-label">个人简介（选填）</view>
+      <t-textarea value="{{extensionIntroduction}}" maxlength="500" placeholder="介绍一下自己" disabled="{{extensionSaving || extensionLoading || !extensionReady}}" autosize="{{true}}" bindchange="onExtensionIntroductionInput" />
+      <view class="field-hint" wx:if="{{extensionNotice}}">{{extensionNotice}}</view>
+      <view class="field-error" wx:if="{{extensionError}}">{{extensionError}}</view>
+      <t-button block wx:if="{{extensionPendingOperation}}" theme="default" variant="text" t-class="text-button" bindtap="restoreExtensionOperation">恢复上次提交内容</t-button>
+      <t-button block theme="primary" shape="rectangle" t-class="primary-button profile-extension-save" loading="{{extensionSaving}}" disabled="{{extensionSaving || extensionLoading || !extensionReady || saving || avatarUploading}}" bindtap="saveExtension">保存标签与简介</t-button>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,74 @@
+<view class="page confirm-page">
+  <view class="state-panel state-error" wx:if="{{invalidMessage}}">
+    <view>{{invalidMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="backToDetail">返回活动详情</t-button>
+  </view>
+
+  <block wx:elif="{{draft}}">
+    <!-- 原型 .registration-summary -->
+    <view class="registration-summary">
+      <view class="registration-summary-copy">
+        <text class="registration-summary-kicker">确认报名</text>
+        <text class="registration-summary-title">{{draft.title}}</text>
+        <text class="registration-summary-meta" wx:if="{{draft.sessionTitle}}">场次：{{draft.sessionTitle}}</text>
+        <text class="registration-summary-meta" wx:elif="{{draft.instanceTitle && draft.instanceTitle !== draft.title}}">{{draft.instanceTitle}}</text>
+        <text class="registration-summary-meta">{{draft.startAt}} 至 {{draft.endAt}}</text>
+      </view>
+      <view class="registration-summary-price">{{draft.price}}</view>
+    </view>
+
+    <view class="section-heading">报名与场次</view>
+    <view class="detail-list">
+      <view class="detail-list-row"><text class="detail-list-key">联系人</text><text class="detail-list-value">{{draft.contactName}}</text></view>
+      <view class="detail-list-row"><text class="detail-list-key">联系电话</text><text class="detail-list-value">{{draft.contactPhoneMasked}}</text></view>
+      <view class="detail-list-row"><text class="detail-list-key">地点</text><text class="detail-list-value">{{draft.venue || '以活动通知为准'}}</text></view>
+      <view class="detail-list-row" wx:if="{{draft.address}}"><text class="detail-list-key">详细地址</text><text class="detail-list-value">{{draft.address}}</text></view>
+      <view class="detail-list-row"><text class="detail-list-key">活动原价</text><text class="detail-list-value price">{{draft.price}}</text></view>
+    </view>
+
+    <view class="section-heading">使用优惠券（可选）</view>
+    <view class="coupon-choice-note" wx:if="{{couponLoading}}">正在读取可用优惠券…</view>
+    <view class="coupon-choice-note" wx:elif="{{couponMessage}}">{{couponMessage}}</view>
+    <view class="coupon-choice-list" wx:elif="{{coupons.length}}">
+      <view class="coupon-choice coupon-choice-none {{selectedCouponId ? '' : 'selected'}}" data-coupon-id="" bindtap="selectCoupon">
+        <view><text class="coupon-choice-title">不使用优惠券</text><text class="coupon-choice-subtitle">按活动原价提交</text></view>
+        <text class="coupon-choice-check">{{selectedCouponId ? '○' : '●'}}</text>
+      </view>
+      <view class="coupon-choice {{selectedCouponId === item.couponId ? 'selected' : ''}}" wx:for="{{coupons}}" wx:key="couponId" data-coupon-id="{{item.couponId}}" bindtap="selectCoupon">
+        <view><text class="coupon-choice-title">减 {{item.faceValueText}}</text><text class="coupon-choice-subtitle">{{item.minimumOrderText}} · {{item.applicabilityText}}</text></view>
+        <text class="coupon-choice-check">{{selectedCouponId === item.couponId ? '●' : '○'}}</text>
+      </view>
+    </view>
+    <view class="coupon-choice-note" wx:if="{{draft.couponDiscountText}}">已减 {{draft.couponDiscountText}}，报名提交后生效。</view>
+
+    <view class="section-heading">报名规则</view>
+    <view class="field-hint">已同意本次报名的隐私与联系人政策。</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button policy-action" bindtap="openPoliciesPage">查看隐私与联系人政策 ›</t-button>
+
+    <block wx:if="{{draft.questionnaireAnswers.length}}">
+      <view class="section-heading">问卷答案</view>
+      <view class="answer-row" wx:for="{{draft.questionnaireAnswers}}" wx:key="fieldId">
+        <view class="answer-label">{{item.label}}</view>
+        <view class="answer-value">{{item.value}}</view>
+      </view>
+    </block>
+
+    <view class="truth-note confirm-truth">提交时会再次确认活动费用、剩余名额和报名状态。</view>
+    <view class="form-error confirm-feedback" wx:if="{{submitMessage}}">{{submitMessage}}</view>
+    <t-button block theme="default" variant="outline" shape="round" t-class="secondary-button form-submit" wx:if="{{conflictAction === 'refresh_form'}}" bindtap="backToForm">返回报名表并刷新</t-button>
+    <t-button block theme="default" variant="outline" shape="round" t-class="secondary-button form-submit" wx:elif="{{conflictAction === 'new_submission'}}" bindtap="backToForm">返回报名表重新提交</t-button>
+    <t-button block theme="default" variant="outline" shape="round" t-class="secondary-button form-submit" wx:elif="{{conflictAction === 'open_registrations'}}" bindtap="openMyRegistrations">查看我的报名</t-button>
+
+    <!-- 原型 .pay-bar -->
+    <view class="bottom-action-spacer"></view>
+    <view class="pay-bar">
+      <view><text class="pay-bar-label">最终应付</text><text class="pay-bar-amount">{{draft.payableText || draft.price}}</text></view>
+      <t-button theme="primary" shape="rectangle"
+        t-class="primary-button confirm-submit-button"
+        loading="{{submitting}}"
+        disabled="{{submitting || submitted || conflicted}}"
+        bindtap="submitRegistration"
+      >{{submitted ? '已提交' : '确认并提交报名'}}</t-button>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,1971 @@
+@import "miniprogram_npm/tdesign-miniprogram/common/style/index.wxss";
+
+/* ============================================================
+   享玩 AI 设计体系（严格对齐参考原型 src/styles.css）
+   navy #10233f · ink #162334 · muted #7c8796 · line #e6ebf1
+   白底 hairline 分区 · pastel 类型标签 · 圆角卡片
+   ============================================================ */
+
+page {
+  --td-brand-color: #10233f;
+  --td-brand-color-active: #0b192b;
+  --td-brand-color-disabled: #aab4c1;
+  --td-brand-color-light: #eaf1f8;
+  --td-warning-color: #aa7618;
+  --td-error-color: #a7484c;
+  --td-radius-default: 12rpx;
+  min-height: 100%;
+  background: #f5f7fa;
+  color: #162334;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+}
+
+button::after {
+  border: 0;
+}
+
+/* ---------- 页面骨架（合同：左右 28rpx，勿改） ---------- */
+
+.page {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 24rpx;
+  padding-right: 28rpx;
+  padding-bottom: 44rpx;
+  padding-left: 28rpx;
+  padding-bottom: calc(44rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(44rpx + env(safe-area-inset-bottom));
+}
+
+/* ---------- 原型文字层级 ---------- */
+
+/* .eyebrow：11px uppercase #8b98a8 */
+.eyebrow {
+  color: #8b98a8;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+}
+
+/* ---------- 首页 Hero（home-final-overrides .home-intro） ---------- */
+
+.home-intro {
+  margin: 24rpx 0 0;
+  padding: 40rpx 32rpx 44rpx;
+  border: 1rpx solid rgba(15, 23, 42, 0.03);
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #f5f9ff 0%, #eef4fb 100%);
+}
+
+.home-brand-line {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: nowrap;
+  margin-top: 16rpx;
+  white-space: nowrap;
+}
+
+.home-brand-line .home-title {
+  color: #10233f;
+  font-size: 52rpx;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.home-kicker {
+  display: inline-block;
+  margin-left: 20rpx;
+  color: #7c8796;
+  font-size: 20rpx;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.home-slogan {
+  margin-top: 24rpx;
+  color: #667386;
+  font-size: 24rpx;
+  line-height: 1.7;
+}
+
+.home-slogan-strong {
+  color: #10233f;
+  font-weight: 700;
+}
+
+/* 首页人物入口（合同要求保留 openPeople） */
+.home-people-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  margin-top: 22rpx;
+  color: #10233f;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.home-people-link-pressed {
+  opacity: 0.65;
+}
+
+/* ---------- 筛选丸 + 浮层菜单（home-filter-overrides） ---------- */
+
+.primary-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20rpx;
+  padding: 24rpx 0 0;
+}
+
+.filter-dropdown {
+  position: relative;
+  min-width: 0;
+}
+
+.filter-trigger {
+  display: flex;
+  width: 100%;
+  min-height: 88rpx;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx 24rpx;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 14rpx;
+  background: #ffffff;
+  color: #10233f;
+}
+
+.filter-trigger-label {
+  overflow: hidden;
+  color: #7c8796;
+  font-size: 20rpx;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-trigger-single {
+  color: #10233f;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.filter-trigger-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4rpx;
+}
+
+.filter-trigger-value {
+  overflow: hidden;
+  color: #10233f;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-trigger-chevron {
+  flex: none;
+  margin-left: 8rpx;
+  color: #526174;
+  font-size: 24rpx;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.filter-dropdown-open .filter-trigger {
+  border-color: #f3c651;
+}
+
+.filter-dropdown-open .filter-trigger-chevron {
+  transform: rotate(180deg);
+}
+
+.filter-menu {
+  position: absolute;
+  z-index: 12;
+  top: 100rpx;
+  right: -4rpx;
+  left: -4rpx;
+  max-height: 540rpx;
+  box-sizing: border-box;
+  padding: 12rpx;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 16rpx;
+  background: #ffffff;
+  box-shadow: 0 24rpx 56rpx rgba(16, 35, 63, 0.12);
+}
+
+.filter-menu-scroll {
+  max-height: 516rpx;
+}
+
+.filter-option {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 16rpx;
+  border-radius: 10rpx;
+  color: #586678;
+  font-size: 22rpx;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.filter-option-selected {
+  background: #edf3f8;
+  color: #10233f;
+  font-weight: 700;
+}
+
+.filter-option-check {
+  flex: none;
+  margin-left: 12rpx;
+  color: #10233f;
+  font-size: 22rpx;
+}
+
+/* ---------- 快捷标签（.topics） ---------- */
+
+.topics {
+  padding: 20rpx 0 4rpx;
+}
+
+.topics-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.topic-pill {
+  flex: none;
+  padding: 12rpx 20rpx;
+  border-radius: 999rpx;
+  background: #eef2f6;
+  color: #667386;
+  font-size: 20rpx;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.topic-pill-on {
+  background: #10233f;
+  color: #ffffff;
+}
+
+/* ---------- 分区标题（.section-title） ---------- */
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16rpx 0 26rpx;
+}
+
+.section-title-main {
+  color: #10233f;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.section-title-side {
+  color: #7c8796;
+  font-size: 20rpx;
+  text-align: right;
+}
+
+/* ---------- 活动行卡（.event-row：左海报右内容） ---------- */
+
+.event-row {
+  display: flex;
+  gap: 24rpx;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #e6ebf1;
+}
+
+.event-row-pressed {
+  opacity: 0.75;
+}
+
+.event-poster {
+  display: grid;
+  width: 216rpx;
+  height: 290rpx;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 16rpx;
+  background: linear-gradient(150deg, #f0f5fa 0%, #e2ebf5 100%);
+  color: #10233f;
+}
+
+.event-poster-text {
+  padding: 0 20rpx;
+  color: rgba(16, 35, 63, 0.5);
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.event-poster-yellow {
+  background: linear-gradient(150deg, #fff6d8 0%, #f9e7ae 100%);
+}
+
+.event-poster-pink {
+  background: linear-gradient(150deg, #fdeef1 0%, #f6d3dc 100%);
+}
+
+.event-poster-blue {
+  background: linear-gradient(150deg, #e9f3fd 0%, #cfe4f7 100%);
+}
+
+.event-poster-green {
+  background: linear-gradient(150deg, #eaf7f1 0%, #cdeadd 100%);
+}
+
+/* 封面图铺满海报区,加载失败由页面置空 coverImageUrl 回退渐变 */
+.event-poster-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* 报名用户头像叠放:40rpx 圆图、-12rpx 水平重叠、2rpx 白描边 */
+.event-participants {
+  display: flex;
+  align-items: center;
+  padding-top: 4rpx;
+}
+
+.event-participant-avatar {
+  position: relative;
+  width: 40rpx;
+  height: 40rpx;
+  box-sizing: border-box;
+  flex: none;
+  border: 2rpx solid #ffffff;
+  border-radius: 50%;
+  background: #eef2f6;
+}
+
+.event-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+/* 原型 .tag：pastel 底 + navy 字 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  padding: 8rpx 14rpx;
+  border-radius: 8rpx;
+  background: #edf0f4;
+  color: #10233f;
+  font-size: 20rpx;
+  line-height: 1.3;
+}
+
+.tag-yellow {
+  background: #fff0b9;
+}
+
+.tag-pink {
+  background: #fbe0e6;
+}
+
+.tag-blue {
+  background: #dcecfb;
+}
+
+.tag-green {
+  background: #dff3e8;
+}
+
+.tag-orange {
+  background: #ffead9;
+}
+
+.event-title {
+  color: #10233f;
+  font-size: 30rpx;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.event-line {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  color: #6f7c8d;
+  font-size: 22rpx;
+  line-height: 1.45;
+}
+
+.event-schedule {
+  display: grid;
+  min-width: 0;
+  gap: 2rpx;
+}
+
+.event-schedule-time {
+  color: #526174;
+  font-weight: 600;
+}
+
+.event-line-icon {
+  flex: none;
+  color: #8b98a8;
+}
+
+.event-foot {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: auto;
+  padding-top: 8rpx;
+}
+
+.event-foot-note {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: #7c8796;
+  font-size: 20rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-want {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.avatar-stack {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+.stack-avatar {
+  position: relative;
+  width: 40rpx;
+  height: 40rpx;
+  box-sizing: border-box;
+  flex: none;
+  border: 2rpx solid #ffffff;
+  border-radius: 50%;
+  background: #eef2f6;
+}
+
+.event-cta {
+  display: inline-flex;
+  width: 148rpx;
+  height: 60rpx;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10rpx;
+  background: #10233f;
+  color: #ffffff;
+  font-size: 22rpx;
+  line-height: 1;
+}
+
+/* ---------- 兼容保留：旧 pill 体系（次级页面使用） ---------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  padding: 8rpx 14rpx;
+  border-radius: 8rpx;
+  background: #edf0f4;
+  color: #10233f;
+  font-size: 20rpx;
+  line-height: 1.3;
+}
+
+.pill-yellow {
+  background: #fff0b9;
+}
+
+.pill-pink {
+  background: #fbe0e6;
+}
+
+.pill-blue {
+  background: #dcecfb;
+}
+
+.pill-green {
+  background: #dff3e8;
+}
+
+.pill-orange {
+  background: #ffead9;
+}
+
+/* 状态标签（原型 stateLabel 用小号描边文本） */
+.state-tag {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #e9f0f8;
+  color: #29476c;
+  font-size: 20rpx;
+  line-height: 1.3;
+}
+
+.state-warm {
+  background: #fff0b9;
+  color: #6d5310;
+}
+
+.state-alert {
+  background: #fbe0e6;
+  color: #84364b;
+}
+
+.state-quiet {
+  background: #edf1f6;
+  color: #68788e;
+}
+
+/* ---------- 下划线页签（原型 .category-tabs） ---------- */
+
+.category-tabs-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.category-tabs {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  gap: 40rpx;
+  padding: 8rpx 0 20rpx;
+  border-bottom: 1rpx solid #e6ebf1;
+}
+
+.category-tab {
+  padding-bottom: 16rpx;
+  border-bottom: 4rpx solid transparent;
+  color: #7c8796;
+  font-size: 26rpx;
+  line-height: 1.4;
+}
+
+.category-tab-on {
+  border-bottom-color: #10233f;
+  color: #10233f;
+  font-weight: 700;
+}
+
+.category-tab-pressed {
+  opacity: 0.6;
+}
+
+/* ---------- 往期双列网格（原型 .past-grid/.past-card） ---------- */
+
+.past-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22rpx;
+  padding: 24rpx 0 40rpx;
+}
+
+.past-card {
+  overflow: hidden;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 16rpx;
+  background: #ffffff;
+  text-align: left;
+}
+
+.past-card-pressed {
+  opacity: 0.75;
+}
+
+.past-card-cover {
+  display: grid;
+  width: 100%;
+  height: 224rpx;
+  place-items: center;
+  background: linear-gradient(150deg, #f0f5fa 0%, #e2ebf5 100%);
+}
+
+.past-card-cover-text {
+  padding: 0 16rpx;
+  color: rgba(16, 35, 63, 0.45);
+  font-size: 26rpx;
+  font-weight: 800;
+  text-align: center;
+}
+
+.past-card-cover-image {
+  width: 100%;
+  height: 100%;
+}
+
+.past-card-body {
+  padding: 20rpx;
+}
+
+.past-card-title {
+  margin: 12rpx 0;
+  color: #10233f;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.past-card-date {
+  color: #7c8796;
+  font-size: 20rpx;
+}
+
+.past-card-stats {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 18rpx;
+  color: #7d8998;
+  font-size: 20rpx;
+}
+
+/* ---------- 我的（原型 .profile/.booking-status/.menu-list） ---------- */
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin: 0 -28rpx;
+  padding: 40rpx 28rpx;
+  background: #f8fafc;
+}
+
+.profile-avatar {
+  display: grid;
+  width: 108rpx;
+  height: 108rpx;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1d3a5f 0%, #10233f 100%);
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: 800;
+}
+
+.profile-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-name {
+  color: #10233f;
+  font-size: 38rpx;
+  font-weight: 750;
+}
+
+.profile-sub {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 10rpx;
+  color: #7c8796;
+  font-size: 22rpx;
+}
+
+.booking-status {
+  display: grid;
+  padding-bottom: 30rpx;
+  border-bottom: 1rpx solid #e6ebf1;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.booking-status-item {
+  display: grid;
+  justify-items: center;
+  gap: 8rpx;
+  color: #7c8796;
+}
+
+.booking-status-value {
+  color: #10233f;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.booking-status-label {
+  font-size: 20rpx;
+}
+
+.menu-list {
+  display: grid;
+}
+
+.menu-row {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 22rpx;
+  padding: 32rpx 0;
+  border-bottom: 1rpx solid #e6ebf1;
+  text-align: left;
+}
+
+.menu-row:last-child {
+  border-bottom: 0;
+}
+
+.menu-row-icon {
+  display: grid;
+  width: 64rpx;
+  height: 64rpx;
+  flex: none;
+  place-items: center;
+  border-radius: 14rpx;
+  background: #f0f5fa;
+  color: #10233f;
+}
+
+.menu-row-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 6rpx;
+}
+
+.menu-row-title {
+  color: #10233f;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.menu-row-subtitle {
+  color: #7c8796;
+  font-size: 20rpx;
+  line-height: 1.45;
+}
+
+.menu-row-arrow {
+  flex: none;
+  color: #aab4c1;
+  font-size: 30rpx;
+}
+
+/* ---------- 详情页（原型 detail-body/action-bar/address-card） ---------- */
+
+.detail-body {
+  padding-bottom: 40rpx;
+}
+
+/* 通栏封面:负外边距抵消 .page 骨架留白(28rpx 横 / 24rpx 顶),图片本身通屏;
+   加载失败由页面置空 coverImageUrl,容器保留渐变占位(首页 event-poster 同一语言) */
+.detail-cover-wrap {
+  width: 750rpx;
+  height: 320rpx;
+  margin: -24rpx -28rpx 0;
+  background: linear-gradient(150deg, #f0f5fa 0%, #e2ebf5 100%);
+}
+
+.detail-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tagline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.detail-title {
+  margin: 22rpx 0 10rpx;
+  color: #10233f;
+  font-size: 46rpx;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.detail-instance {
+  color: #7c8796;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.detail-stats {
+  margin: 20rpx 0 6rpx;
+  color: #7c8796;
+  font-size: 22rpx;
+}
+
+/* 原型 content-blocks h3：浅蓝 chip */
+.content-chip {
+  display: inline-block;
+  padding: 12rpx 28rpx;
+  border-radius: 12rpx;
+  background: #eef5fb;
+  color: #10233f;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.content-text {
+  margin-top: 16rpx;
+  color: #586678;
+  font-size: 26rpx;
+  line-height: 1.8;
+}
+
+/* 原型 .address-card */
+.address-card {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 28rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  background: #f4f7fa;
+  color: #10233f;
+  text-align: left;
+}
+
+.address-card-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 6rpx;
+}
+
+.address-card-title {
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.address-card-note {
+  color: #7c8796;
+  font-size: 20rpx;
+}
+
+/* 原型 .action-bar */
+.action-bar {
+  position: fixed;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding-top: 16rpx;
+  padding-right: 26rpx;
+  padding-bottom: 16rpx;
+  padding-left: 26rpx;
+  padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid #e6ebf1;
+  background: #ffffff;
+}
+
+.action-bar-price {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 2rpx;
+  margin-right: auto;
+  color: #10233f;
+  font-size: 34rpx;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.action-bar-price-label {
+  color: #7c8796;
+  font-size: 20rpx;
+  font-weight: 400;
+}
+
+.action-bar-tool {
+  display: flex;
+  width: 76rpx;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: #718093;
+  font-size: 20rpx;
+  line-height: 1.3;
+}
+
+.action-bar-tool::after {
+  border: none;
+}
+
+/* 原生 <button open-type="share"> 的 UA 默认宽度（约 184px）会撑破布局，需元素+类选择器压掉 */
+button.action-bar-tool {
+  width: 76rpx;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.action-bar-tool-active {
+  color: #c69014;
+}
+
+.action-bar-primary {
+  display: flex;
+  height: 88rpx;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 38rpx;
+  border-radius: 12rpx;
+  background: #10233f;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.action-bar-primary-disabled {
+  background: #c7d0dc;
+}
+
+.action-bar-spacer {
+  height: 170rpx;
+}
+
+/* ---------- 详情内容卡（图文详情 / 本场领队 / 往期精彩） ---------- */
+
+.detail-card {
+  margin-top: 28rpx;
+  padding: 28rpx;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 20rpx;
+  background: #ffffff;
+}
+
+.detail-card-title {
+  color: #10233f;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* 图文详情:text 块 H3 + 正文,image 块通栏圆角图 + caption */
+.content-block + .content-block {
+  margin-top: 32rpx;
+}
+
+.content-block-title {
+  color: #10233f;
+  font-size: 34rpx;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.content-block-body {
+  margin-top: 14rpx;
+  color: #162334;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+
+.content-block-image {
+  display: block;
+  width: 100%;
+  border-radius: 12rpx;
+  background: #eef2f6;
+}
+
+.content-block-caption {
+  margin-top: 12rpx;
+  color: #7c8796;
+  font-size: 22rpx;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 本场领队:横向滚动人物列,54px 风格圆头像 + 昵称 + 角色小字 */
+.leaders-scroll {
+  width: 100%;
+  margin-top: 24rpx;
+  white-space: nowrap;
+}
+
+.leaders-row {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  gap: 28rpx;
+}
+
+.leader-item {
+  display: flex;
+  width: 140rpx;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leader-avatar {
+  width: 108rpx;
+  height: 108rpx;
+  font-size: 40rpx;
+}
+
+.leader-avatar-image {
+  overflow: hidden;
+  border-radius: 50%;
+  background: #eef2f6;
+}
+
+.leader-name {
+  max-width: 100%;
+  margin-top: 14rpx;
+  overflow: hidden;
+  color: #162334;
+  font-size: 24rpx;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leader-role {
+  max-width: 100%;
+  margin-top: 4rpx;
+  overflow: hidden;
+  color: #7c8796;
+  font-size: 20rpx;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 往期精彩:三图网格(1 大 2 小,按图片数量自适应)+ 查看更多 */
+.review-grid {
+  display: grid;
+  gap: 12rpx;
+  margin-top: 24rpx;
+  grid-template-columns: 1fr 1fr;
+}
+
+.review-grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.review-grid-image {
+  display: block;
+  width: 100%;
+  height: 220rpx;
+  border-radius: 12rpx;
+  background: #eef2f6;
+}
+
+.review-grid-1 .review-grid-image {
+  height: 320rpx;
+}
+
+.review-grid-3 .review-grid-image:first-child {
+  height: 320rpx;
+  grid-column: 1 / -1;
+}
+
+.review-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  margin-top: 24rpx;
+  padding-top: 22rpx;
+  border-top: 1rpx solid #e6ebf1;
+  color: #29476c;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.review-more-pressed {
+  opacity: 0.65;
+}
+
+/* ---------- 元信息行（图标芯片行，详情/报名详情用） ---------- */
+
+.meta-icon {
+  display: grid;
+  width: 52rpx;
+  height: 52rpx;
+  flex: none;
+  place-items: center;
+  border-radius: 12rpx;
+  background: #f0f5fa;
+  color: #10233f;
+  font-size: 26rpx;
+  line-height: 1;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #edf1f6;
+}
+
+.meta-row:last-child {
+  border-bottom: 0;
+}
+
+.meta-row-pressed {
+  opacity: 0.7;
+}
+
+.meta-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 5rpx;
+}
+
+.meta-label {
+  color: #8a96a8;
+  font-size: 20rpx;
+  line-height: 1.2;
+}
+
+.meta-value {
+  color: #10233f;
+  font-size: 25rpx;
+  font-weight: 650;
+  line-height: 1.45;
+  word-break: break-all;
+}
+
+.meta-note {
+  color: #7c8796;
+  font-size: 21rpx;
+  line-height: 1.45;
+  word-break: break-all;
+}
+
+.meta-arrow {
+  flex: none;
+  color: #aab4c1;
+}
+
+/* ---------- 键值行（原型 .detail-list） ---------- */
+
+.detail-list {
+  padding-top: 12rpx;
+}
+
+.detail-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.detail-list-key {
+  flex: none;
+  color: #7c8796;
+}
+
+.detail-list-value {
+  min-width: 0;
+  max-width: 66%;
+  color: #10233f;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+
+.detail-list-green {
+  color: #228d5a;
+}
+
+/* ---------- 报名摘要（原型 .registration-summary） ---------- */
+
+.registration-summary {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 24rpx 0 28rpx;
+  border-bottom: 1rpx solid #e6ebf1;
+}
+
+.registration-summary-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 6rpx;
+}
+
+.registration-summary-kicker {
+  color: #7c8796;
+  font-size: 20rpx;
+}
+
+.registration-summary-title {
+  color: #10233f;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.registration-summary-meta {
+  color: #7c8796;
+  font-size: 22rpx;
+}
+
+.registration-summary-price {
+  flex: none;
+  color: #10233f;
+  font-size: 30rpx;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- 状态横幅与 QR（原型 .status-banner/.qr） ---------- */
+
+.status-banner {
+  padding: 30rpx;
+  border-radius: 18rpx;
+  background: #f0f5fa;
+}
+
+.status-banner-title {
+  margin: 14rpx 0 10rpx;
+  color: #10233f;
+  font-size: 36rpx;
+  font-weight: 750;
+}
+
+.status-banner-text {
+  color: #647286;
+  font-size: 22rpx;
+  line-height: 1.6;
+}
+
+.qr-block {
+  padding: 52rpx 0;
+  border-bottom: 1rpx solid #e6ebf1;
+  text-align: center;
+}
+
+.qr-frame {
+  display: grid;
+  width: 300rpx;
+  height: 300rpx;
+  margin: 0 auto;
+  place-items: center;
+  border: 14rpx dotted #10233f;
+  color: #10233f;
+  font-size: 40rpx;
+  font-weight: 800;
+  letter-spacing: 4rpx;
+  line-height: 1.2;
+}
+
+.qr-caption {
+  margin: 24rpx 0 8rpx;
+  color: #10233f;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.qr-note {
+  color: #7c8796;
+  font-size: 22rpx;
+  line-height: 1.6;
+}
+
+/* ---------- 权益（原型 .identity/.progress-card/.benefit） ---------- */
+
+.identity-card {
+  margin-bottom: 40rpx;
+  padding: 36rpx;
+  border-radius: 20rpx;
+  background: #10233f;
+  color: #ffffff;
+}
+
+.identity-eyebrow {
+  color: #b7c7db;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+}
+
+.identity-name {
+  margin: 16rpx 0 24rpx;
+  font-size: 46rpx;
+  font-weight: 800;
+}
+
+.identity-tag {
+  display: inline-flex;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  background: #f3c651;
+  color: #10233f;
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.section-heading {
+  margin: 34rpx 0 18rpx;
+  color: #10233f;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.progress-card {
+  padding: 28rpx;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 16rpx;
+}
+
+.progress-card-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+}
+
+.progress-card-head-strong {
+  color: #10233f;
+  font-weight: 700;
+}
+
+.progress-track {
+  height: 14rpx;
+  margin: 24rpx 0 14rpx;
+  overflow: hidden;
+  border-radius: 999rpx;
+  background: #e9eef4;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999rpx;
+  background: #f3c651;
+}
+
+.progress-card-note {
+  color: #7c8796;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.benefit-row {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #e6ebf1;
+}
+
+.benefit-row:last-child {
+  border-bottom: 0;
+}
+
+.benefit-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 6rpx;
+}
+
+.benefit-title {
+  color: #10233f;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.benefit-note {
+  color: #7c8796;
+  font-size: 20rpx;
+}
+
+/* ---------- 优惠券（原型 coupon 虚线分隔卡） ---------- */
+
+.coupon-panel {
+  display: flex;
+  align-items: stretch;
+  gap: 22rpx;
+  padding: 24rpx;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 16rpx;
+  background: #ffffff;
+}
+
+.coupon-panel-value {
+  display: grid;
+  min-width: 132rpx;
+  padding-right: 22rpx;
+  align-content: center;
+  justify-items: center;
+  gap: 4rpx;
+  border-right: 1rpx dashed #d9e1e9;
+  color: #10233f;
+  text-align: center;
+}
+
+.coupon-panel-body {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 8rpx;
+}
+
+/* ---------- 表单（原型 .apply-form/question-input） ---------- */
+
+.field-label {
+  margin-top: 28rpx;
+  color: #10233f;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.required {
+  color: #c6536e;
+}
+
+.text-input,
+.text-area {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 12rpx;
+  border: 1rpx solid #dbe3ec;
+  border-radius: 12rpx;
+  background: #ffffff;
+  color: #10233f;
+  font-size: 24rpx;
+}
+
+.text-input {
+  min-height: 84rpx;
+  padding: 0 22rpx;
+}
+
+.text-area {
+  min-height: 180rpx;
+  padding: 18rpx 22rpx;
+  line-height: 1.55;
+}
+
+.choice-row {
+  display: flex;
+  align-items: center;
+  min-height: 72rpx;
+  color: #31445e;
+  font-size: 26rpx;
+}
+
+.choice-row radio,
+.choice-row checkbox {
+  margin-right: 16rpx;
+}
+
+.acknowledgement-row {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 24rpx;
+  color: #4f6076;
+  font-size: 24rpx;
+  line-height: 1.55;
+}
+
+.acknowledgement-row checkbox {
+  flex: none;
+  margin-right: 14rpx;
+}
+
+.field-error,
+.form-error {
+  margin-top: 12rpx;
+  color: #913d50;
+  font-size: 23rpx;
+  line-height: 1.5;
+}
+
+.form-notice {
+  margin-top: 12rpx;
+  color: #6d5720;
+  font-size: 23rpx;
+  line-height: 1.5;
+}
+
+.truth-note,
+.privacy-purpose,
+.field-help {
+  margin-top: 20rpx;
+  color: #7b899c;
+  font-size: 22rpx;
+  line-height: 1.6;
+}
+
+.form-truth {
+  text-align: center;
+}
+
+.form-submit {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 28rpx auto 0;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 价格行（原型 .price-lines/.pay-bar） ---------- */
+
+.price-lines {
+  margin-top: 32rpx;
+}
+
+.price-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 20rpx 0;
+  color: #718093;
+  font-size: 24rpx;
+}
+
+.price-line-value {
+  color: #10233f;
+  font-weight: 600;
+}
+
+.price-line-divider {
+  height: 1rpx;
+  background: #e6ebf1;
+}
+
+.price-line-total {
+  font-size: 28rpx;
+}
+
+.price-line-total .price-line-value {
+  font-size: 40rpx;
+  font-weight: 800;
+}
+
+.pay-bar {
+  position: fixed;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16rpx;
+  padding-right: 28rpx;
+  padding-bottom: 16rpx;
+  padding-left: 28rpx;
+  padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid #e6ebf1;
+  background: #ffffff;
+}
+
+.pay-bar-label {
+  color: #7c8796;
+  font-size: 22rpx;
+}
+
+.pay-bar-amount {
+  margin-left: 8rpx;
+  color: #10233f;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.pay-bar-button {
+  display: inline-flex;
+  height: 88rpx;
+  align-items: center;
+  justify-content: center;
+  padding: 0 36rpx;
+  border-radius: 12rpx;
+  background: #06b95b;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pay-bar-button-disabled {
+  background: #c7d0dc;
+}
+
+/* ---------- 列表行卡（报名/订单/收藏通用，原型 event-row 语言） ---------- */
+
+.row-card {
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #e6ebf1;
+}
+
+.row-card-pressed {
+  opacity: 0.75;
+}
+
+.row-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.row-card-title {
+  margin-top: 14rpx;
+  color: #10233f;
+  font-size: 30rpx;
+  font-weight: 750;
+  line-height: 1.35;
+  word-break: break-all;
+}
+
+.row-card-sub {
+  margin-top: 8rpx;
+  color: #7c8796;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.row-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.price {
+  color: #10233f;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.price-note {
+  margin-left: 12rpx;
+  color: #8793a5;
+  font-size: 20rpx;
+}
+
+.link-more {
+  color: #29476c;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+/* ---------- 下一期面板（原型 .next-event） ---------- */
+
+.next-panel {
+  margin-top: 32rpx;
+  padding: 28rpx;
+  border-radius: 16rpx;
+  background: #edf4fb;
+}
+
+.next-panel-kicker {
+  color: #4a7299;
+  font-size: 20rpx;
+}
+
+.next-panel-title {
+  margin: 14rpx 0 20rpx;
+  color: #10233f;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.next-panel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  color: #10233f;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+/* ---------- 状态与提示 ---------- */
+
+.state-panel {
+  margin-top: 22rpx;
+  padding: 40rpx 0;
+  color: #6a788c;
+  font-size: 26rpx;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.state-error {
+  color: #913d50;
+}
+
+.quiet-empty {
+  padding: 24rpx 0;
+  color: #8a96a8;
+  font-size: 23rpx;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.text-button {
+  display: inline-block;
+  margin-top: 14rpx;
+  padding: 0 12rpx;
+  background: transparent;
+  color: #29476c;
+  font-size: 25rpx;
+  line-height: 2;
+}
+
+.list-footer {
+  padding: 30rpx 0 12rpx;
+  color: #8a96a8;
+  font-size: 23rpx;
+  text-align: center;
+}
+
+.status-strip {
+  margin-top: 18rpx;
+  padding: 20rpx 22rpx;
+  border-radius: 12rpx;
+  background: #fffdf4;
+  color: #5e4b15;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.success-banner {
+  margin: 18rpx 0 4rpx;
+  padding: 20rpx 22rpx;
+  border-radius: 12rpx;
+  background: #f2f9f4;
+  color: #228d5a;
+  font-size: 24rpx;
+  line-height: 1.55;
+}
+
+/* 键名小标签（券/订单行内事实） */
+.fact-key {
+  flex: none;
+  width: 82rpx;
+  color: #8a96a8;
+  font-size: 22rpx;
+}
+
+/* ---------- 头像（无图片数据时的渐变底文字圆） ---------- */
+
+.avatar-circle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1d3a5f 0%, #10233f 100%);
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2rpx rgba(255, 255, 255, 0.14);
+}
+
+/* ---------- 统计格 ---------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14rpx;
+}
+
+.stat-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-item {
+  display: grid;
+  justify-items: center;
+  gap: 8rpx;
+  padding: 24rpx 10rpx;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 16rpx;
+  background: #fbfcfe;
+}
+
+.stat-value {
+  color: #10233f;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.stat-label {
+  color: #8a96a8;
+  font-size: 20rpx;
+}
+
+/* ---------- 兼容：底部固定按钮（旧页面结构仍在用） ---------- */
+
+.bottom-action-spacer {
+  height: 190rpx;
+}
+
+.bottom-action {
+  position: fixed;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding-top: 16rpx;
+  padding-right: 28rpx;
+  padding-bottom: 16rpx;
+  padding-left: 28rpx;
+  padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid #e6ebf1;
+  background: #ffffff;
+}
+
+.primary-button,
+.secondary-button,
+.danger-button {
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 750;
+  line-height: 88rpx;
+}
+
+.primary-button {
+  background: #10233f;
+  color: #ffffff;
+}
+
+.primary-button[disabled] {
+  background: #c7d0dc;
+  color: #ffffff;
+}
+
+.secondary-button {
+  border: 1rpx solid #b8c5d4;
+  background: #ffffff;
+  color: #10233f;
+}
+
+.danger-button {
+  border: 1rpx solid #e3b7c0;
+  background: #ffffff;
+  color: #a7484c;
+}
+
+.inline-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300rpx;
+  margin: 24rpx auto 0;
+}
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 360px) {
+  .page {
+    padding-right: 22rpx;
+    padding-left: 22rpx;
+  }
+
+  .detail-cover-wrap {
+    margin-right: -22rpx;
+    margin-left: -22rpx;
+  }
+
+  .home-brand-line .home-title {
+    font-size: 46rpx;
+  }
+
+  .detail-title {
+    font-size: 40rpx;
+  }
+}
+
+/* 主操作占满组件外层；状态操作与摘要保持居中。 */
+.primary-button,
+.secondary-button,
+.danger-button {
+  box-sizing: border-box;
+  justify-content: center;
+  text-align: center;
+}
+.home-page,
+.past-page,
+.my-page {
+  padding-bottom: calc(144rpx + env(safe-area-inset-bottom));
+}
+.state-panel .text-button,
+.quiet-empty,
+.saved-message {
+  text-align: center;
+}
+.state-panel .text-button {
+  justify-content: center;
+}
+.order-more-toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 24rpx;
+  color: #526174;
+  font-size: 26rpx;
+  line-height: 64rpx;
+}
+
+.section-heading,
+.status-banner,
+.status-strip {
+  text-align: center;
+}
+.status-banner .state-tag {
+  display: inline-flex;
+  justify-content: center;
+}
+
+.order-detail-page .content-text,
+.order-detail-page .payment-notice,
+.order-detail-page .payment-result {
+  text-align: center;
+}

@@ -1,0 +1,30 @@
+<view class="page checkin-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在安全生成签到凭证…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" wx:if="{{canRefresh}}" bindtap="refreshCredential">重新生成</t-button>
+  </view>
+
+  <!-- 原型 .qr：居中凭证区 -->
+  <view class="qr-block" wx:if="{{hasCredential}}">
+    <view class="qr-shell">
+      <canvas type="2d" id="checkin-qr" canvas-id="checkin-qr" class="checkin-qr" width="260" height="260"></canvas>
+      <view class="qr-loading" wx:if="{{!qrReady && !qrDrawFailed}}">正在绘制二维码…</view>
+    </view>
+    <view class="qr-caption" wx:if="{{secondsRemaining > 0}}">动态凭证 · {{secondsRemaining}} 秒后失效</view>
+    <view class="qr-note">活动现场请出示二维码，由工作人员扫码签到</view>
+    <view class="backup-panel">
+      <view class="backup-label">无法扫码时出示备份码</view>
+      <view class="backup-code">{{backupCode}}</view>
+    </view>
+    <view class="credential-meta">签发 {{issuedAtText}} · 到期 {{expiresAtText}}</view>
+  </view>
+
+  <view class="status-strip" wx:if="{{noticeMessage}}">{{noticeMessage}}</view>
+
+  <view class="section-heading">安全说明</view>
+  <view class="content-text">二维码和备份码均为短时签到凭证，请只向现场工作人员出示。离开本页或凭证过期后将立即失效，请勿截图或转发给他人。</view>
+
+  <t-button block theme="primary" shape="round" t-class="primary-button form-submit" disabled="{{!canRefresh}}" bindtap="refreshCredential">{{refreshButtonText}}</t-button>
+  <t-button block theme="default" variant="outline" shape="round" t-class="secondary-button form-submit" bindtap="backToRegistration">返回报名详情</t-button>
+</view>

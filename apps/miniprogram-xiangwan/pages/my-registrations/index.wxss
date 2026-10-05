@@ -1,0 +1,66 @@
+/* 我的报名页级样式：公共类在 app.wxss（原型 category-tabs/row 语言） */
+
+.registrations-page {
+  padding-top: 8rpx;
+}
+
+.registration-state {
+  display: inline-block;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #e9f0f8;
+  color: #29476c;
+  font-size: 20rpx;
+  line-height: 1.3;
+}
+
+.registration-state-pending_payment,
+.registration-state-refund_processing {
+  background: #fff0b9;
+  color: #6d5310;
+}
+
+.registration-state-cancelled,
+.registration-state-refunded {
+  background: #fbe0e6;
+  color: #84364b;
+}
+
+.registration-state-ended {
+  background: #edf1f6;
+  color: #68788e;
+}
+
+.registrations-page .event-line {
+  margin-top: 12rpx;
+}
+
+.registration-facts {
+  display: flex;
+  margin-top: 20rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid #edf1f6;
+}
+
+.registration-fact {
+  min-width: 0;
+  flex: 1;
+}
+
+.registration-fact + .registration-fact {
+  padding-left: 22rpx;
+  border-left: 1rpx solid #edf1f6;
+}
+
+.registration-fact-label {
+  color: #8a96a8;
+  font-size: 20rpx;
+}
+
+.registration-fact-value {
+  margin-top: 6rpx;
+  color: #10233f;
+  font-size: 22rpx;
+  font-weight: 650;
+  line-height: 1.4;
+}

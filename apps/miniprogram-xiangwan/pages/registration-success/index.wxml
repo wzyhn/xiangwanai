@@ -1,0 +1,20 @@
+<view class="page success-page">
+  <!-- 原型成功态:居中绿色对勾 + 标题 + 副文案 -->
+  <view class="success-hero">
+    <view class="success-check">✓</view>
+    <view class="success-title">报名成功</view>
+    <view class="success-subtitle">期待与你在现场见面</view>
+  </view>
+
+  <view class="success-card" wx:if="{{sessionTitle}}">
+    <view class="success-card-title">{{sessionTitle}}</view>
+    <view class="success-card-row" wx:if="{{sessionLabel && sessionLabel !== sessionTitle}}">场次：{{sessionLabel}}</view>
+    <view class="success-card-row" wx:if="{{sessionTime}}">{{sessionTime}}</view>
+    <view class="success-card-row" wx:if="{{venue}}">{{venue}}</view>
+  </view>
+
+  <view class="success-actions">
+    <t-button theme="primary" shape="round" block t-class="primary-button success-action" bindtap="openRegistrationDetail">查看报名进度</t-button>
+    <t-button theme="default" variant="outline" shape="round" block t-class="secondary-button success-action" bindtap="backToHome">返回首页</t-button>
+  </view>
+</view>

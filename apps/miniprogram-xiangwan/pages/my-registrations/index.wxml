@@ -1,0 +1,66 @@
+<view class="page registrations-page">
+  <view class="state-panel" wx:if="{{needsLogin}}">
+    <view>登录后查看自己的报名记录</view>
+    <t-button block theme="primary" shape="round" t-class="primary-button inline-action" loading="{{loading}}" bindtap="loginAndLoad">微信登录</t-button>
+    <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </view>
+
+  <block wx:else>
+    <!-- 原型 .category-tabs：下划线页签 -->
+    <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="category-tabs-scroll">
+      <view class="category-tabs">
+        <view
+          wx:for="{{stateFilters}}"
+          wx:key="value"
+          class="category-tab {{activeState === item.value ? 'category-tab-on' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="selectState"
+          hover-class="category-tab-pressed"
+        >{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="state-panel" wx:if="{{loading && !items.length}}"><t-loading theme="circular" size="40rpx" text="正在加载报名记录…" /></view>
+    <view class="state-panel state-error" wx:elif="{{errorMessage && !items.length}}">
+      <view>{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+    <view class="quiet-empty" wx:elif="{{emptyMessage}}">{{emptyMessage}}</view>
+    <view class="state-panel state-error" wx:if="{{errorMessage && items.length}}">
+      <view>当前仍展示上次成功加载的报名记录：{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+
+    <view
+      class="row-card"
+      wx:for="{{items}}"
+      wx:key="registrationId"
+      data-registration-id="{{item.registrationId}}"
+      bindtap="openRegistration"
+      hover-class="row-card-pressed"
+    >
+      <view class="row-card-head">
+        <view class="registration-state registration-state-{{item.state}}">{{item.stateLabel}}</view>
+        <view class="link-more">查看详情 ›</view>
+      </view>
+      <view class="row-card-title">{{item.title}}</view>
+      <view class="row-card-sub" wx:if="{{item.sessionTitle && item.sessionTitle !== item.title}}">场次：{{item.sessionTitle}}</view>
+      <view class="event-line"><t-icon name="time" size="26rpx" color="#8b98a8" /><text>{{item.startAt}} 至 {{item.endAt}}</text></view>
+      <view class="event-line"><t-icon name="location" size="26rpx" color="#8b98a8" /><text>{{item.location}}</text></view>
+      <view class="row-card-sub" wx:if="{{item.address}}">{{item.address}}</view>
+      <view class="registration-facts">
+        <view class="registration-fact">
+          <view class="registration-fact-label">费用</view>
+          <view class="registration-fact-value">{{item.paymentText}}</view>
+        </view>
+        <view class="registration-fact">
+          <view class="registration-fact-label">签到</view>
+          <view class="registration-fact-value">{{item.checkinText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="list-footer" wx:if="{{loadingMore}}">正在加载更多…</view>
+    <view class="list-footer" wx:elif="{{items.length && !nextCursor}}">已展示全部记录</view>
+  </block>
+</view>

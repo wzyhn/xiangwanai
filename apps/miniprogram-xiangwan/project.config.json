@@ -1,0 +1,405 @@
+{
+  "appid": "wx05ff9791f73fe3bd",
+  "projectname": "miniprogram-xiangwan",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "packOptions": {
+    "ignore": [
+      {
+        "value": "docs",
+        "type": "folder"
+      },
+      {
+        "value": "scripts",
+        "type": "folder"
+      },
+      {
+        "value": "node_modules",
+        "type": "folder"
+      },
+      {
+        "value": ".git",
+        "type": "folder"
+      },
+      {
+        "value": ".test.js",
+        "type": "suffix"
+      },
+      {
+        "value": ".md",
+        "type": "suffix"
+      },
+      {
+        "value": ".yaml",
+        "type": "suffix"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/action-sheet"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/attachments"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/avatar"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/avatar-group"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/back-top"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/badge"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/cascader"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/cell"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/cell-group"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-actionbar"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-content"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-list"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-loading"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-markdown"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-message"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-sender"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/chat-thinking"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/check-tag"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/col"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/collapse"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/collapse-panel"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/color-picker"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/count-down"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/date-time-picker"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/dialog"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/divider"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/drawer"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/dropdown-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/dropdown-menu"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/fab"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/footer"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/form"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/form-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/grid"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/grid-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/guide"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/image-viewer"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/indexes"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/indexes-anchor"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/link"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/message"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/message-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/miniprogram_npm"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/navbar"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/notice-bar"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/paragraph"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/picker"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/picker-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/popover"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/progress"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/pull-down-refresh"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/qrcode"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/rate"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/result"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/row"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/scroll-view"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/search"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/segmented"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/side-bar"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/side-bar-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/skeleton"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/slider"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/step-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/stepper"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/steps"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/sticky"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/swipe-cell"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/swiper"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/swiper-nav"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/switch"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/tab-bar"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/tab-bar-item"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/tab-panel"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/table"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/tabs"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/tag"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/text"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/title"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/toast"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/transition"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/tree-select"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/upload"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram_npm/tdesign-miniprogram/watermark"
+      }
+    ],
+    "include": []
+  },
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "minified": true,
+    "postcss": true,
+    "packNpmManually": true,
+    "packNpmRelationList": [
+      {
+        "packageJsonPath": "./package.json",
+        "miniprogramNpmDistDir": "./"
+      }
+    ],
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "ignoreDevUnusedFiles": false,
+    "ignoreUploadUnusedFiles": false
+  },
+  "simulatorPluginLibVersion": {},
+  "editorSetting": {},
+  "isGameTourist": false
+}

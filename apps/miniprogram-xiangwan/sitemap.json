@@ -1,0 +1,33 @@
+{
+  "desc": "享玩 sitemap — 仅索引公开活动、人物、往期与回顾页面；用户私有和报名页面默认禁止索引。",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "pages/index/index"
+    },
+    {
+      "action": "allow",
+      "page": "pages/session-detail/index"
+    },
+    {
+      "action": "allow",
+      "page": "pages/past-activities/index"
+    },
+    {
+      "action": "allow",
+      "page": "pages/activity-review/index"
+    },
+    {
+      "action": "allow",
+      "page": "pages/people/index"
+    },
+    {
+      "action": "allow",
+      "page": "pages/person-detail/index"
+    },
+    {
+      "action": "disallow",
+      "page": "*"
+    }
+  ]
+}

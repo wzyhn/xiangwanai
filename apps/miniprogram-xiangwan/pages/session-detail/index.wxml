@@ -1,0 +1,158 @@
+<view class="page detail-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在加载活动详情…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <view class="detail-body">
+      <!-- 原型 .tagline -->
+      <view class="tagline">
+        <view
+          wx:for="{{detail.tagItems}}"
+          wx:key="*this"
+          class="tag {{index === 0 ? 'tag-blue' : 'tag-yellow'}}"
+        >{{item}}</view>
+        <view wx:if="{{detail.state !== 'open'}}" class="state-tag {{detail.stateTone === 'alert' ? 'state-alert' : detail.stateTone === 'quiet' ? 'state-quiet' : 'state-warm'}}">{{detail.stateLabel}}</view>
+      </view>
+      <view class="detail-title">{{detail.title}}</view>
+      <view class="detail-instance" wx:if="{{detail.sessionTitle && detail.sessionTitle !== detail.title}}">场次：{{detail.sessionTitle}}</view>
+      <view class="detail-stats" wx:if="{{detail.historyText}}">{{detail.historyText}}</view>
+
+      <!-- 原型图标信息卡：时间 / 地点 / 报名情况 -->
+      <view class="detail-meta">
+        <view class="meta-row">
+          <view class="meta-icon"><t-icon name="time" size="30rpx" color="#10233f" /></view>
+          <view class="meta-copy">
+            <text class="meta-label">时间</text>
+            <text class="meta-value">{{detail.scheduleDateText}} · {{detail.scheduleTimeText}}</text>
+          </view>
+        </view>
+        <view class="meta-row" bindtap="openLocation" hover-class="{{detail.canOpenLocation ? 'meta-row-pressed' : ''}}">
+          <view class="meta-icon"><t-icon name="location" size="30rpx" color="#10233f" /></view>
+          <view class="meta-copy">
+            <text class="meta-label">地点</text>
+            <text class="meta-value">{{detail.deliveryMode === 'online' ? ('线上 · ' + (detail.onlineMode || '参与方式以活动通知为准')) : (detail.venue || detail.area)}}</text>
+            <text class="meta-note" wx:if="{{detail.deliveryMode === 'offline' && detail.address}}">{{detail.address}}</text>
+          </view>
+          <t-icon wx:if="{{detail.canOpenLocation}}" name="chevron-right" size="28rpx" color="#8b98a8" />
+        </view>
+        <view class="meta-row">
+          <view class="meta-icon"><t-icon name="usergroup" size="30rpx" color="#10233f" /></view>
+          <view class="meta-copy">
+            <text class="meta-label">报名情况</text>
+            <text class="meta-value">{{detail.registrationCountText}}</text>
+            <text class="meta-note" wx:if="{{detail.remainingText && detail.registrationCountText !== detail.remainingText}}">{{detail.remainingText}}</text>
+            <text class="meta-note" wx:if="{{detail.groupMinimumText}}">{{detail.groupMinimumText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="detail-section-title" wx:if="{{detail.contentBlocks.length || detail.coverImageUrl}}">活动详情</view>
+      <image wx:if="{{detail.coverImageUrl}}" class="content-block-image detail-cover-fallback" src="{{detail.coverImageUrl}}" mode="widthFix" binderror="onDetailCoverError" />
+      <!-- 图文详情:content_blocks 按序渲染,封面与内容块可同时展示 -->
+      <view class="detail-content-flow" wx:if="{{detail.contentBlocks.length}}">
+        <block wx:for="{{detail.contentBlocks}}" wx:key="index" wx:for-item="block">
+          <view wx:if="{{block.type === 'text'}}" class="content-block">
+            <view class="content-chip" wx:if="{{block.title}}">{{block.title}}</view>
+            <view class="content-block-body" wx:if="{{block.body}}">{{block.body}}</view>
+          </view>
+          <view wx:elif="{{block.type === 'image'}}" class="content-block">
+            <image
+              wx:if="{{block.imageUrl}}"
+              class="content-block-image"
+              src="{{block.imageUrl}}"
+              mode="widthFix"
+              data-block-index="{{index}}"
+              binderror="onContentBlockImageError"
+            />
+            <view wx:else class="content-block-image-fallback">图片暂不可用</view>
+            <view class="content-block-caption" wx:if="{{block.caption}}">{{block.caption}}</view>
+          </view>
+        </block>
+      </view>
+
+      <!-- 本场领队:横向滚动人物列,纯展示不跳转 -->
+      <view class="detail-section-block leaders-card" wx:if="{{detail.leaders.length}}">
+        <view class="detail-card-title">本场领队 <text class="detail-card-action">认识新伙伴</text></view>
+        <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="leaders-scroll">
+          <view class="leaders-row">
+            <view class="leader-item" wx:for="{{detail.leaders}}" wx:key="index">
+              <image
+                wx:if="{{item.avatarUrl}}"
+                class="leader-avatar leader-avatar-image"
+                src="{{item.avatarUrl}}"
+                mode="aspectFill"
+                data-index="{{index}}"
+                binderror="onLeaderAvatarError"
+              />
+              <view wx:else class="avatar-circle leader-avatar">{{item.avatarText}}</view>
+              <view class="leader-name">{{item.displayName}}</view>
+              <view class="leader-role" wx:if="{{item.roleLabel}}">{{item.roleLabel}}</view>
+              <view class="leader-role" wx:if="{{item.headline}}">{{item.headline}}</view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 往期精彩:上一期回顾三图网格 + 查看更多 -->
+      <view class="detail-section-block previous-review-card" wx:if="{{detail.previousReview}}">
+        <view class="detail-card-title">往期精彩
+          <view class="review-more" bindtap="openPreviousReview" hover-class="review-more-pressed"><text>查看更多</text><t-icon name="chevron-right" size="24rpx" color="#29476c" /></view>
+        </view>
+        <view
+          class="review-grid review-grid-{{detail.previousReview.imageUrls.length}}"
+          wx:if="{{detail.previousReview.imageUrls.length}}"
+        >
+          <image
+            wx:for="{{detail.previousReview.imageUrls}}"
+            wx:key="*this"
+            class="review-grid-image"
+            src="{{item}}"
+            mode="aspectFill"
+            data-review-index="{{index}}"
+            binderror="onPreviousReviewImageError"
+          />
+        </view>
+      </view>
+
+      <!-- 只有不可报名时保留原因；可报名态使用原型底部主按钮承载入口。 -->
+      <view class="detail-section" wx:if="{{!detail.registrationReady || statusErrorMessage || alreadyRegistered}}">
+        <view class="content-chip">报名说明</view>
+        <view class="truth-note">报名时间：{{detail.registrationWindow}}</view>
+        <view class="content-text" wx:if="{{detail.registrationReady && !statusErrorMessage}}">进入报名表后填写联系人和活动问卷，最后一步会展示本场费用与完整信息。</view>
+        <view class="content-text" wx:elif="{{alreadyRegistered}}">{{detail.registrationNotice}}</view>
+        <view class="content-text" wx:elif="{{detail.paidRegistrationPending}}">{{detail.registrationNotice}}</view>
+        <view class="content-text" wx:else>{{detail.registrationNotice}}</view>
+        <view class="truth-note" wx:if="{{detail.registrationReady}}">提交时会重新确认价格和剩余名额。</view>
+        <view class="state-error" wx:if="{{statusErrorMessage}}">
+          <view>{{statusErrorMessage}}</view>
+          <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">刷新状态</t-button>
+        </view>
+      </view>
+
+      <view class="favorite-feedback" wx:if="{{favoriteMessage}}">{{favoriteMessage}}</view>
+      <view class="favorite-feedback favorite-feedback-error" wx:if="{{favoriteError}}">{{favoriteError}}</view>
+    </view>
+
+    <!-- 原型 .action-bar -->
+    <view class="action-bar-spacer"></view>
+    <view class="action-bar">
+      <view class="action-bar-price">
+        <view class="action-bar-price-label">报名费用</view>
+        <view>{{detail.price}}</view>
+      </view>
+      <view class="action-bar-tool {{favoriteSaved ? 'action-bar-tool-active' : ''}}" bindtap="favoriteSeries">
+        <t-icon name="{{favoriteSaved ? 'heart-filled' : 'heart'}}" size="40rpx" color="{{favoriteSaved ? '#c69014' : '#718093'}}" />
+        <text>{{favoriteSaving ? '保存中' : favoriteSaved ? '已想去' : '想去'}}</text>
+      </view>
+      <button class="action-bar-tool" open-type="share">
+        <t-icon name="share" size="40rpx" color="#718093" />
+        <text>邀请</text>
+      </button>
+      <button class="action-bar-primary" wx:if="{{alreadyRegistered}}" bindtap="openExistingRegistration">查看报名详情</button>
+      <button class="action-bar-primary" wx:else disabled="{{!detail.registrationReady || statusRefreshing || registrationStarting || statusErrorMessage}}" bindtap="startRegistration">{{statusRefreshing || registrationStarting ? '正在确认状态…' : statusErrorMessage ? '状态待更新' : detail.ctaLabel}}</button>
+    </view>
+  </block>
+</view>

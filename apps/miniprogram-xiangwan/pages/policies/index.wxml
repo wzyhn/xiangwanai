@@ -1,0 +1,17 @@
+<view class="page policies-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" text="正在加载政策…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage}}"><view>{{errorMessage}}</view><t-button block theme="primary" variant="text" t-class="text-button" bindtap="loadPolicies">重新加载</t-button></view>
+  <block wx:else>
+    <view class="section-heading">微信隐私保护指引</view>
+    <view class="field-help">版本 {{privacyVersion || '尚未发布'}}</view>
+    <t-button block theme="primary" variant="outline" t-class="secondary-button form-submit" bindtap="openPrivacyContract">查看微信隐私保护指引</t-button>
+    <view class="section-heading">报名联系人政策</view>
+    <view class="field-help">版本 {{contactVersion || '尚未发布'}}</view>
+    <text class="policy-content" user-select="{{true}}">{{contactText}}</text>
+    <view class="section-heading">取消报名与退款规则</view>
+    <view class="field-help">版本 {{cancellationVersion || '尚未发布'}}</view>
+    <text class="policy-content" user-select="{{true}}">{{cancellationText}}</text>
+    <view class="section-heading">签到凭证</view>
+    <view class="content-text">二维码和备份码仅供现场工作人员核验。离开页面后会清除本地显示；重新生成会使旧凭证失效。请勿截图或转发。</view>
+  </block>
+</view>

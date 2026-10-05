@@ -1,0 +1,140 @@
+<view class="page benefits-page">
+  <view class="state-panel" wx:if="{{needsLogin}}">
+    <view>登录后查看仅属于你的身份与贡献记录</view>
+    <t-button block theme="primary" shape="round" t-class="primary-button inline-action" loading="{{loading}}" bindtap="loginAndLoad">微信登录</t-button>
+    <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </view>
+
+  <block wx:else>
+    <view class="state-panel" wx:if="{{loading && !benefits}}"><t-loading theme="circular" size="40rpx" text="正在加载身份与贡献…" /></view>
+    <view class="state-panel state-error" wx:elif="{{errorMessage && !benefits}}">
+      <view>{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+
+    <block wx:if="{{benefits}}">
+      <view class="benefits-refreshing" wx:if="{{loading}}"><t-loading theme="circular" size="28rpx" /> <text>正在更新身份与贡献…</text></view>
+      <view class="state-panel state-error" wx:if="{{errorMessage}}">
+        <view>当前仍展示上次成功加载的身份与贡献：{{errorMessage}}</view>
+        <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+      </view>
+
+      <!-- 原型 .identity：navy 身份卡 -->
+      <view class="identity-card">
+        <view class="identity-eyebrow">我的身份</view>
+        <view class="identity-name">{{benefits.hasHostIdentity ? '社区共创者' : '社区成员'}}</view>
+        <view class="identity-tag">{{benefits.hasHostIdentity ? '主理人' : '社区成员'}}</view>
+      </view>
+
+      <view class="section-heading benefits-contribution-heading">我的贡献</view>
+      <view class="progress-card contribution-card">
+        <view class="progress-card-head">
+          <text class="progress-card-head-strong">主持活动</text>
+          <text class="progress-card-head-strong">{{benefits.hostContributionCount}} / {{benefits.hostContributionTarget}} 场</text>
+        </view>
+        <view class="progress-track"><view class="progress-fill" style="width: {{benefits.hostContributionProgressWidth}}"></view></view>
+        <view class="progress-card-note">{{benefits.hostContributionRemaining}}</view>
+      </view>
+
+      <view class="section-heading">可获得的权益</view>
+      <view class="benefit-list prototype-benefit-list">
+        <view class="benefit-row prototype-benefit-row">
+          <view class="benefit-symbol">◇</view>
+          <view class="benefit-copy">
+            <view class="benefit-title">专题活动免费券 ×1</view>
+            <view class="benefit-note">累计主持 5 场活动后自动发放</view>
+          </view>
+        </view>
+        <view class="benefit-row prototype-benefit-row">
+          <view class="benefit-symbol">▣</view>
+          <view class="benefit-copy">
+            <view class="benefit-title">本场活动免报名费</view>
+            <view class="benefit-note">以邀约嘉宾身份参与时可使用</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 原型 .booking-status：三格状态带 -->
+      <view class="booking-status booking-status-3">
+        <view class="booking-status-item">
+          <view class="booking-status-value">{{benefits.hasTrustedBinding ? '已建立' : '未建立'}}</view>
+          <view class="booking-status-label">可信人物绑定</view>
+        </view>
+        <view class="booking-status-item">
+          <view class="booking-status-value">{{benefits.hasHostIdentity ? '已具备' : '未具备'}}</view>
+          <view class="booking-status-label">主理人身份</view>
+        </view>
+        <view class="booking-status-item">
+          <view class="booking-status-value">{{benefits.hostContributionCount}}</view>
+          <view class="booking-status-label">有效贡献</view>
+        </view>
+      </view>
+
+      <view class="section-heading">当前活动身份（{{benefits.currentRoles.length}}）</view>
+      <t-button block theme="default" variant="outline" t-class="secondary-button form-submit" wx:if="{{!benefits.hasTrustedBinding}}" bindtap="openPeopleBinding">绑定人物资料</t-button>
+      <view class="quiet-empty" wx:if="{{!benefits.currentRoles.length}}">当前没有进行中的活动身份</view>
+      <view class="benefit-row" wx:for="{{benefits.currentRoles}}" wx:key="key">
+        <view class="benefit-copy">
+          <view class="benefit-title">{{item.seriesTitle}}</view>
+          <view class="benefit-note">{{item.instanceTitle}} · 授予于 {{item.grantedAt}}</view>
+        </view>
+        <view class="state-tag {{item.stateTone === 'alert' ? 'state-alert' : item.stateTone === 'warm' ? 'state-warm' : item.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{item.roleLabel}}</view>
+      </view>
+
+      <view class="section-heading">历史活动身份（{{benefits.historicalRoles.length}}）</view>
+      <view class="quiet-empty" wx:if="{{!benefits.historicalRoles.length}}">还没有历史活动身份</view>
+      <view class="benefit-row" wx:for="{{benefits.historicalRoles}}" wx:key="key">
+        <view class="benefit-copy">
+          <view class="benefit-title">{{item.seriesTitle}}</view>
+          <view class="benefit-note">{{item.instanceTitle}} · 授予于 {{item.grantedAt}}</view>
+          <view class="benefit-note" wx:if="{{item.revokedAt}}">撤销于 {{item.revokedAt}}</view>
+        </view>
+        <view class="state-tag state-quiet">{{item.roleLabel}}</view>
+      </view>
+
+      <view class="section-heading">主理人规则</view>
+      <view class="progress-card">
+        <view class="progress-card-head">
+          <text class="progress-card-head-strong">申请规则</text>
+          <text class="state-tag {{benefits.hostRules.configured ? '' : 'state-quiet'}}">{{benefits.hostRules.stateLabel}}</text>
+        </view>
+        <block wx:if="{{benefits.hostRules.configured}}">
+          <view class="field-hint">申请要求与可获支持可在主理人申请页查看。</view>
+          <t-button block theme="primary" t-class="primary-button form-submit" bindtap="openHostApplication">查看规则与申请</t-button>
+        </block>
+        <view class="quiet-empty" wx:else>社区尚未发布主理人规则</view>
+      </view>
+
+      <view class="section-heading">主理人申请记录（{{benefits.applicationHistory.length}}）</view>
+      <t-button block theme="primary" t-class="primary-button form-submit" wx:if="{{benefits.currentApplication.status === 'pending'}}" bindtap="openHostApplication">查看或撤回申请</t-button>
+      <view class="progress-card" wx:if="{{benefits.currentApplication}}">
+        <view class="progress-card-head">
+          <text class="progress-card-head-strong">当前申请 · {{benefits.currentApplication.cycle}}</text>
+          <text class="state-tag {{benefits.currentApplication.stateTone === 'alert' ? 'state-alert' : benefits.currentApplication.stateTone === 'warm' ? 'state-warm' : benefits.currentApplication.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{benefits.currentApplication.statusLabel}}</text>
+        </view>
+      </view>
+      <view class="quiet-empty" wx:if="{{!benefits.applicationHistory.length}}">还没有主理人申请记录</view>
+      <view class="benefit-row" wx:for="{{benefits.applicationHistory}}" wx:key="key">
+        <view class="benefit-copy">
+          <view class="benefit-title">{{item.cycle}}</view>
+          <view class="benefit-note">规则版本 {{item.policyVersion}} · 提交于 {{item.submittedAt}}</view>
+          <view class="benefit-note" wx:if="{{item.reviewComment}}">审核说明：{{item.reviewComment}}</view>
+        </view>
+        <view class="state-tag {{item.stateTone === 'alert' ? 'state-alert' : item.stateTone === 'warm' ? 'state-warm' : item.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{item.statusLabel}}</view>
+      </view>
+
+      <view class="section-heading">主理人贡献（{{benefits.hostContributionCountText}}）</view>
+      <view class="quiet-empty" wx:if="{{!benefits.contributions.length}}">还没有签到贡献记录</view>
+      <view class="benefit-row" wx:for="{{benefits.contributions}}" wx:key="key">
+        <view class="benefit-copy">
+          <view class="benefit-title">{{item.typeLabel}}</view>
+          <view class="benefit-note">记录于 {{item.earnedAt}}</view>
+          <view class="benefit-note" wx:if="{{item.reversedAt}}">撤销于 {{item.reversedAt}}</view>
+        </view>
+        <view class="state-tag {{item.stateTone === 'alert' ? 'state-alert' : item.stateTone === 'warm' ? 'state-warm' : item.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{item.stateLabel}}</view>
+      </view>
+
+      <view class="truth-note history-note" wx:if="{{!benefits.identityHistoryAvailable}}">当前还没有可展示的身份历史。</view>
+    </block>
+  </block>
+</view>

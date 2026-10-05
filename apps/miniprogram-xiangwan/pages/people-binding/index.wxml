@@ -1,0 +1,21 @@
+<view class="page">
+  <view class="panel">
+    <view class="title">绑定人物资料</view>
+    <view class="hint">管理员核对本人后提供邀请码。请登录自己的微信账号，核对资料后再确认。</view>
+    <view class="label">本人确认邀请码 <text class="required">*</text></view>
+    <textarea value="{{code}}" maxlength="80" disabled="{{loading || submitting || pending}}" bindinput="onCodeInput" placeholder="粘贴管理员提供的完整邀请码" />
+    <t-button block theme="default" variant="outline" t-class="secondary-button form-submit" bindtap="loadPreview" loading="{{loading}}" disabled="{{loading || submitting || pending}}">读取人物资料</t-button>
+  </view>
+  <view class="panel" wx:if="{{preview}}">
+    <view class="title">{{preview.display_name}}</view>
+    <view class="hint" wx:if="{{preview.headline}}">{{preview.headline}}</view>
+    <view class="copy">{{preview.introduction}}</view>
+    <checkbox-group bindchange="onConsentChange">
+      <label><checkbox value="consent" checked="{{consent}}" disabled="{{submitting || pending}}" />我确认这是本人资料，同意将当前微信账号与此人物资料绑定 <text class="required">*</text></label>
+    </checkbox-group>
+    <t-button block theme="default" variant="outline" t-class="secondary-button form-submit" bindtap="confirmBinding" loading="{{submitting}}" disabled="{{submitting}}">{{pending ? '核对原确认请求' : '确认本人绑定'}}</t-button>
+  </view>
+  <view class="error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  <view class="panel" wx:if="{{notice}}"><view>{{notice}}</view><t-button block theme="default" variant="outline" t-class="secondary-button form-submit" bindtap="backToBenefits">返回我的权益</t-button></view>
+  <view class="hint">邀请码只在本页使用，不会进入分享链接。离开页面后清除输入；如果确认结果未知，请先查看我的权益，避免重复操作。</view>
+</view>

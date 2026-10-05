@@ -1,0 +1,13 @@
+/* 我的订单页级样式：公共类在 app.wxss */
+
+.orders-page {
+  padding-top: 8rpx;
+}
+
+.orders-page .event-line {
+  margin-top: 12rpx;
+}
+
+.orders-page .row-card-sub:last-child {
+  margin-top: 0;
+}

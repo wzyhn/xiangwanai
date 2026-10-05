@@ -1,0 +1,115 @@
+<view class="page registration-detail-page">
+  <view class="success-banner" wx:if="{{successMessage}}">{{successMessage}}</view>
+  <view class="state-panel" wx:if="{{loading && !detail}}"><t-loading theme="circular" size="40rpx" text="正在读取报名状态…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage && !detail}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <view class="status-strip" wx:if="{{loading}}">正在更新报名状态…</view>
+    <view class="state-panel state-error" wx:if="{{errorMessage}}">
+      <view>{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+    <!-- 原型 .status-banner -->
+    <view class="status-banner">
+      <view class="state-tag">{{detail.stateLabel}}</view>
+      <view class="status-banner-title">{{detail.title}}</view>
+      <view class="status-banner-text" wx:if="{{detail.sessionTitle && detail.sessionTitle !== detail.title}}">场次：{{detail.sessionTitle}}</view>
+      <view class="status-banner-text">{{detail.startAt}} 至 {{detail.endAt}}</view>
+      <view class="status-banner-text" wx:if="{{detail.location}}">{{detail.location}}</view>
+    </view>
+
+    <!-- 签到凭证直接嵌入报名详情；首次进入会立即签发，离开页面才清除。 -->
+    <view class="checkin-preview" wx:if="{{detail.checkinCredentialEligible}}">
+      <view class="qr-block qr-block-preview">
+        <view class="qr-shell">
+          <canvas type="2d" id="checkin-qr" canvas-id="checkin-qr" class="checkin-qr" width="260" height="260"></canvas>
+          <view class="qr-loading" wx:if="{{checkin.hasCredential && !checkin.qrReady && !checkin.qrDrawFailed}}">正在绘制二维码…</view>
+          <view class="qr-loading" wx:elif="{{checkin.loading}}">正在安全生成签到凭证…</view>
+        </view>
+        <view class="qr-caption" wx:if="{{checkin.secondsRemaining > 0}}">动态凭证 · {{checkin.secondsRemaining}} 秒后失效</view>
+        <view class="qr-caption" wx:elif="{{checkin.expired}}">签到凭证已过期</view>
+        <view class="qr-note">活动现场请出示二维码，由工作人员扫码签到</view>
+        <view class="backup-panel" wx:if="{{checkin.hasCredential}}">
+          <view class="backup-label">无法扫码时出示备份码</view>
+          <view class="backup-code">{{checkin.backupCode}}</view>
+        </view>
+        <view class="status-strip" wx:if="{{checkin.errorMessage || checkin.noticeMessage}}">{{checkin.errorMessage || checkin.noticeMessage}}</view>
+        <t-button block theme="primary" shape="round" t-class="primary-button checkin-entry-button" wx:if="{{checkin.canRefresh}}" bindtap="refreshCredential">{{checkin.refreshButtonText}}</t-button>
+      </view>
+    </view>
+
+    <view class="section-heading">报名信息</view>
+    <view class="detail-list">
+      <view class="detail-list-row" wx:if="{{detail.address}}"><text class="detail-list-key">详细地址</text><text class="detail-list-value">{{detail.address}}</text></view>
+      <view class="detail-list-row"><text class="detail-list-key">签到状态</text><text class="detail-list-value">{{detail.checkinText}}</text></view>
+      <view class="detail-list-row" wx:if="{{detail.contactName}}"><text class="detail-list-key">报名联系人</text><text class="detail-list-value">{{detail.contactName}}</text></view>
+      <view class="detail-list-row" wx:if="{{detail.contactPhoneMasked}}"><text class="detail-list-key">联系电话</text><text class="detail-list-value">{{detail.contactPhoneMasked}}</text></view>
+    </view>
+
+    <block wx:if="{{detail.orderId}}">
+      <view class="section-heading">{{detail.canContinuePayment ? '待支付订单' : '关联订单'}}</view>
+
+      <t-button block theme="primary" shape="round" t-class="primary-button form-submit" loading="{{openingOrder}}" disabled="{{openingOrder || loading || cancelling || cancellationOutcomeUnknown}}" bindtap="openExistingOrder">{{detail.canContinuePayment ? '查看订单并继续支付' : '查看订单'}}</t-button>
+      <view class="form-error" wx:if="{{orderError}}">{{orderError}}</view>
+    </block>
+    <block wx:if="{{detail.paymentStatusText}}">
+      <view class="section-heading">支付状态</view>
+      <view class="content-text">{{detail.paymentStatusText}} · {{detail.paymentText}}</view>
+    </block>
+
+    <block wx:if="{{detail.refund}}">
+      <view class="section-heading">退款进度</view>
+      <view class="detail-list">
+        <view class="detail-list-row"><text class="detail-list-key">当前退款状态</text><text class="detail-list-value">{{detail.refund.statusLabel}}</text></view>
+        <view class="detail-list-row"><text class="detail-list-key">申请退款金额</text><text class="detail-list-value">{{detail.refund.requestedRefundText}}</text></view>
+        <view class="detail-list-row"><text class="detail-list-key">已成功退款</text><text class="detail-list-value detail-list-green">{{detail.refund.successfulRefundText}}</text></view>
+        <view class="detail-list-row" wx:if="{{detail.refund.resolvedAt}}"><text class="detail-list-key">处理完成时间</text><text class="detail-list-value">{{detail.refund.resolvedAt}}</text></view>
+      </view>
+      <view class="truth-note" wx:if="{{!detail.refund.resolvedAt && detail.refund.updatedAt}}">最近更新 {{detail.refund.updatedAt}}</view>
+    </block>
+
+    <block wx:if="{{detail.cancellation}}">
+      <view class="section-heading">取消记录</view>
+      <view class="content-text">{{detail.cancellation.at}} · {{detail.cancellation.reason || '原因以运营记录为准'}}</view>
+    </block>
+
+    <block wx:if="{{detail.couponAdjustment}}">
+      <view class="section-heading">优惠券处理</view>
+      <view class="content-text">{{detail.couponAdjustment.text}}</view>
+
+    </block>
+
+    <view class="status-strip" wx:if="{{cancellationResult}}">
+      <view>{{cancellationResult.title}} · {{cancellationResult.detail}}</view>
+      <view class="truth-note">生效时间 {{cancellationResult.cancelledAtText}}</view>
+    </view>
+
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="openPoliciesPage">查看取消与退款规则 ›</t-button>
+    <block wx:if="{{detail.canSelfCancel && !cancellationOutcomeUnknown}}">
+      <view class="section-heading">取消报名</view>
+      <view class="content-text">当前报名可以自助取消。取消后将无法继续参加或使用签到凭证。</view>
+      <view class="content-text" wx:if="{{detail.paymentStatus === 'paid_confirmed'}}">取消后按实付金额申请人工退款，可在本页查看处理进度。提交取消不代表退款已到账。</view>
+      <t-button block theme="danger" variant="outline" shape="round"
+        t-class="danger-button form-submit"
+        loading="{{cancelling}}"
+        disabled="{{cancelling}}"
+        bindtap="requestCancellation"
+      >{{cancelling ? '正在取消…' : '取消本次报名'}}</t-button>
+    </block>
+    <block wx:if="{{detail.cancellationPolicyRequired && !detail.canSelfCancel}}">
+      <view class="section-heading">取消报名</view>
+      <view class="content-text">这笔报名暂时无法在线取消。如需帮助，请联系活动方核对付款和优惠券情况。</view>
+    </block>
+    <view class="form-error" wx:if="{{cancellationError}}">{{cancellationError}}</view>
+    <view class="status-strip" wx:if="{{cancellationNotice}}">{{cancellationNotice}}</view>
+    <t-button block theme="default" variant="outline" shape="round"
+      t-class="secondary-button form-submit"
+      wx:if="{{cancellationOutcomeUnknown}}"
+      bindtap="refreshCancellationStatus"
+    >刷新报名状态</t-button>
+    <t-button block theme="default" variant="outline" shape="round" t-class="secondary-button form-submit back-home-button" bindtap="backToHome">返回活动首页</t-button>
+  </block>
+</view>

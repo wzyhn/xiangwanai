@@ -1,0 +1,64 @@
+<view class="page order-detail-page">
+  <view class="state-panel" wx:if="{{loading && !detail}}"><t-loading theme="circular" size="40rpx" text="正在读取订单…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage && !detail}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <block wx:if="{{detail}}">
+    <!-- 原型 .status-banner -->
+    <view class="status-banner">
+      <view class="state-tag {{detail.order.stateTone === 'alert' ? 'state-alert' : detail.order.stateTone === 'warm' ? 'state-warm' : detail.order.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{detail.order.stateLabel}}</view>
+      <view class="status-banner-title">{{detail.order.title}}</view>
+      <view class="status-banner-text" wx:if="{{detail.order.sessionTitle && detail.order.sessionTitle !== detail.order.title}}">场次：{{detail.order.sessionTitle}}</view>
+
+    </view>
+
+    <view class="section-heading">订单结果</view>
+    <view class="content-text">{{detail.order.outcomeLabel}}</view>
+
+
+    <view class="section-heading">费用</view>
+    <view class="detail-list">
+      <view class="detail-list-row" wx:if="{{detail.order.hasDiscount}}"><text class="detail-list-key">原价</text><text class="detail-list-value">{{detail.order.originalPriceText}}</text></view>
+      <view class="detail-list-row" wx:if="{{detail.order.hasDiscount}}"><text class="detail-list-key">优惠</text><text class="detail-list-value detail-list-green">{{detail.order.discountText}}</text></view>
+      <view class="detail-list-row"><text class="detail-list-key">应付</text><text class="detail-list-value">{{detail.order.payableText}}</text></view>
+      <view class="detail-list-row" wx:if="{{detail.order.actualPaidText}}"><text class="detail-list-key">实付</text><text class="detail-list-value">{{detail.order.actualPaidText}}</text></view>
+      <view class="detail-list-row" wx:if="{{showMore && detail.order.paidAt}}"><text class="detail-list-key">支付时间</text><text class="detail-list-value">{{detail.order.paidAt}}</text></view>
+      <view class="detail-list-row" wx:if="{{showMore && detail.order.closedAt}}"><text class="detail-list-key">关单时间</text><text class="detail-list-value">{{detail.order.closedAt}}</text></view>
+    </view>
+
+    <view class="form-error payment-notice" wx:if="{{detail.order.paymentNotice && !paymentMessage}}">{{detail.order.paymentNotice}}</view>
+    <view class="truth-note payment-result" wx:if="{{paymentMessage}}">{{paymentMessage}}</view>
+    <t-button block wx:if="{{detail.order.canPay}}" theme="primary" shape="round" t-class="form-submit" loading="{{paymentBusy}}" disabled="{{paymentBusy || loading || errorMessage}}" bindtap="startPayment">继续支付</t-button>
+    <t-button block wx:if="{{detail.order.paymentConfirmationPending || paymentNeedsQuery}}" theme="default" variant="outline" shape="round" t-class="secondary-button form-submit" loading="{{paymentBusy}}" disabled="{{paymentBusy}}" bindtap="verifyPayment">查询支付结果</t-button>
+
+    <view class="order-more-toggle" bindtap="toggleMore" aria-role="button" aria-expanded="{{showMore}}">{{showMore ? '收起订单信息' : '更多订单信息'}} <t-icon name="{{showMore ? 'chevron-up' : 'chevron-down'}}" size="28rpx" /></view>
+    <view class="truth-note" wx:if="{{showMore}}">支付状态：{{detail.order.paymentStatusLabel}} · 最近更新：{{detail.order.lastBusinessAt}}</view>
+    <view class="section-heading">活动时间</view>
+    <view class="detail-list">
+      <view class="detail-list-row"><text class="detail-list-key">开始</text><text class="detail-list-value">{{detail.order.startAt}}</text></view>
+      <view class="detail-list-row"><text class="detail-list-key">结束</text><text class="detail-list-value">{{detail.order.endAt}}</text></view>
+      <view class="detail-list-row" wx:if="{{showMore}}"><text class="detail-list-key">锁位状态</text><text class="detail-list-value">{{detail.order.holdStatusLabel}}</text></view>
+      <view class="detail-list-row" wx:if="{{detail.order.holdStatus === 'held'}}"><text class="detail-list-key">付款截止</text><text class="detail-list-value">{{detail.order.holdExpiresAt}}</text></view>
+    </view>
+
+    <block wx:if="{{detail.order.refund}}">
+      <view class="section-heading">退款进度</view>
+      <view class="detail-list">
+        <view class="detail-list-row"><text class="detail-list-key">当前状态</text><text class="detail-list-value">{{detail.order.refund.statusLabel}}</text></view>
+        <view class="detail-list-row"><text class="detail-list-key">申请退款</text><text class="detail-list-value">{{detail.order.refund.requestedRefundText}}</text></view>
+        <view class="detail-list-row"><text class="detail-list-key">成功退款</text><text class="detail-list-value detail-list-green">{{detail.order.refund.successfulRefundText}}</text></view>
+      </view>
+      <view class="truth-note" wx:if="{{detail.order.refund.resolvedAt}}">完成时间 {{detail.order.refund.resolvedAt}}</view>
+      <view class="truth-note" wx:elif="{{detail.order.refund.updatedAt}}">最近更新 {{detail.order.refund.updatedAt}}</view>
+    </block>
+
+    <view class="state-panel state-error" wx:if="{{errorMessage}}">
+      <view>当前仍展示上次成功加载的订单：{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+    <t-button block theme="default" variant="outline" shape="round" t-class="secondary-button form-submit" bindtap="openRegistration">查看报名与取消选项</t-button>
+
+  </block>
+</view>

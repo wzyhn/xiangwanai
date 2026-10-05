@@ -1,0 +1,9 @@
+{
+  "name": "mp-init",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "mp-auth-session": "workspace:*"
+  }
+}

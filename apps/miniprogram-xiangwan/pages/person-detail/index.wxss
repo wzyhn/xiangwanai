@@ -1,0 +1,27 @@
+.person-detail-page {
+  padding-top: 24rpx;
+}
+
+.person-hero {
+  text-align: center;
+}
+
+.person-avatar-large {
+  width: 132rpx;
+  height: 132rpx;
+  margin: 28rpx auto 0;
+  font-size: 50rpx;
+}
+
+.person-hero .detail-title {
+  margin-top: 20rpx;
+}
+
+.person-introduction {
+  margin-top: 22rpx;
+  color: #31445e;
+  font-size: 27rpx;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

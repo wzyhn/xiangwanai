@@ -1,0 +1,73 @@
+/* 报名成功页级样式：公共按钮类在 app.wxss（primary-button/secondary-button） */
+
+.success-hero {
+  display: grid;
+  justify-items: center;
+  padding: 72rpx 0 44rpx;
+  text-align: center;
+}
+
+/* 原型成功对勾：绿色 #23a467 圆形徽标，直径 56px（112rpx） */
+.success-check {
+  display: grid;
+  width: 112rpx;
+  height: 112rpx;
+  place-items: center;
+  border-radius: 50%;
+  background: #23a467;
+  color: #ffffff;
+  font-size: 52rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.success-title {
+  margin-top: 28rpx;
+  color: #10233f;
+  font-size: 40rpx;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.success-subtitle {
+  margin-top: 12rpx;
+  color: #7c8796;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.success-card {
+  padding: 28rpx;
+  border: 1rpx solid #e6ebf1;
+  border-radius: 16rpx;
+  background: #ffffff;
+}
+
+.success-card-title {
+  color: #10233f;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.success-card-row {
+  margin-top: 12rpx;
+  color: #7c8796;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.success-actions {
+  display: grid;
+  gap: 20rpx;
+  margin-top: 44rpx;
+}
+
+.success-action {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}

@@ -1,0 +1,23 @@
+{
+  "name": "miniprogram-xiangwan",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "check:release": "node scripts/check-release-readiness.js",
+    "test": "node --test api/http.test.js app.test.js features/benefits/model.test.js features/cancellation/model.test.js features/catalog/model.test.js features/checkin-credential/model.test.js features/coupons/model.test.js features/favorites/model.test.js features/orders/model.test.js features/orders/payment-operation.test.js features/past-activities/model.test.js features/people/model.test.js features/profile/extension.test.js features/profile/model.test.js features/registration/model.test.js features/registrations/model.test.js pages/activity-review/index.test.js pages/checkin-credential/index.test.js pages/contact-setup/index.test.js pages/people-binding/index.test.js pages/host-application/index.test.js pages/contract.test.js pages/external-resource/index.test.js pages/index/index.test.js pages/my/index.test.js pages/my-benefits/index.test.js pages/my-coupons/index.test.js pages/my-favorites/index.test.js pages/my-orders/index.test.js pages/my-profile/index.test.js pages/my-registrations/index.test.js pages/order-detail/index.test.js pages/past-activities/index.test.js pages/people/index.test.js pages/person-detail/index.test.js pages/registration-confirm/index.test.js pages/registration-detail/index.test.js pages/registration/index.test.js pages/session-collection/index.test.js pages/session-detail/index.test.js scripts/release-contract.test.js scripts/release-workflow.test.js scripts/tdesign-pack.test.js services/xiangwan-api.test.js utils/errors.test.js utils/media-url.test.js utils/runtime-config.test.js"
+  },
+  "dependencies": {
+    "dayjs": "1.11.13",
+    "mp-auth-session": "workspace:*",
+    "mp-http": "workspace:*",
+    "mp-init": "workspace:*",
+    "mp-product-registry": "workspace:*",
+    "mp-weconq-auth-runtime": "workspace:*",
+    "qrcode-generator": "2.0.4",
+    "tdesign-miniprogram": "^1.15.3",
+    "tslib": "2.8.1"
+  },
+  "devDependencies": {
+    "jsqr": "1.4.0"
+  }
+}

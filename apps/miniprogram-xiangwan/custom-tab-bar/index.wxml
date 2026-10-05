@@ -1,0 +1,6 @@
+<view class="navigation" aria-role="tablist">
+  <view wx:for="{{tabs}}" wx:key="value" class="navigation-item {{value === item.value ? 'navigation-item-active' : ''}}" data-value="{{item.value}}" bindtap="changeTab" aria-role="tab" aria-selected="{{value === item.value}}" aria-label="{{item.label}}">
+    <t-icon name="{{item.icon}}" size="44rpx" color="{{value === item.value ? '#10233f' : '#6f7c8d'}}" />
+    <text class="navigation-label">{{item.label}}</text>
+  </view>
+</view>

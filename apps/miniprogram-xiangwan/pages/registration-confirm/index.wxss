@@ -1,0 +1,77 @@
+/* 报名确认页级样式：公共类在 app.wxss（原型 registration-summary/pay-bar） */
+
+.confirm-page {
+  padding-top: 16rpx;
+}
+
+.policy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 16rpx;
+}
+
+.policy-action {
+  margin: 0 14rpx 0 0;
+  padding: 0;
+}
+
+.policy-content {
+  display: block;
+  margin-top: 16rpx;
+  padding: 18rpx;
+  border-radius: 12rpx;
+  background: #f7fafc;
+  color: #39475b;
+  font-size: 25rpx;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.confirm-truth,
+.confirm-feedback {
+  padding-right: 8rpx;
+  padding-left: 8rpx;
+}
+
+.confirm-submit-button {
+  min-width: 0;
+  margin: 0;
+}
+
+.coupon-choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.coupon-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  padding: 18rpx 20rpx;
+  border: 1rpx solid #d7e0ea;
+  border-radius: 12rpx;
+  background: #fff;
+}
+.coupon-choice.selected {
+  border-color: #1b6eea;
+  background: #f1f6ff;
+}
+.coupon-choice-title {
+  display: block;
+  color: #1f2d3d;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+.coupon-choice-subtitle,
+.coupon-choice-note {
+  display: block;
+  margin-top: 6rpx;
+  color: #718096;
+  font-size: 23rpx;
+  line-height: 1.5;
+}
+.coupon-choice-check {
+  color: #1b6eea;
+  font-size: 32rpx;
+}

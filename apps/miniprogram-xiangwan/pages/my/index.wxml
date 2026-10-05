@@ -1,0 +1,63 @@
+<view class="page my-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在读取登录状态…" /></view>
+
+  <!-- 未登录：居中引导（原型无此态，产品必需） -->
+  <view class="state-panel" wx:elif="{{needsLogin}}">
+    <view>登录后查看仅属于你的活动记录</view>
+    <t-button block theme="primary" shape="rectangle" t-class="primary-button inline-action" loading="{{loading}}" bindtap="login">微信登录</t-button>
+    <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </view>
+
+  <block wx:else>
+    <!-- 原型 .profile：浅底头像带，整区可点进资料编辑 -->
+    <view class="profile" bindtap="openProfile" hover-class="profile-pressed">
+      <image
+        wx:if="{{profileBadge.avatarUrl}}"
+        class="profile-avatar profile-avatar-image"
+        src="{{profileBadge.avatarUrl}}" data-url="{{profileBadge.avatarUrl}}"
+        mode="aspectFill"
+        binderror="onAvatarError"
+      />
+      <view wx:else class="profile-avatar">{{profileBadge.initial}}</view>
+      <view class="profile-copy">
+        <view class="profile-name">{{profileBadge.displayName}}</view>
+        <view class="profile-sub">{{profileBadge.hasNickname ? '管理你的头像和昵称' : '设置头像和昵称，完善你的资料'}}</view>
+      </view>
+      <view class="profile-action"><t-icon name="chevron-right" size="32rpx" color="#10233f" /></view>
+    </view>
+
+    <view class="my-section-head">
+      <view class="section-heading my-menu-heading">我的预约</view>
+      <view class="my-section-link" data-key="registrations" bindtap="openFeature">全部 <t-icon name="chevron-right" size="24rpx" color="#29476c" /></view>
+    </view>
+    <view class="booking-status">
+      <view class="booking-status-item" wx:for="{{bookingStatus}}" wx:key="key" data-key="{{item.key}}" bindtap="openBookingStatus" hover-class="menu-row-pressed">
+        <view class="booking-status-value {{item.value === '—' ? 'booking-status-placeholder' : ''}}">{{item.value}}</view>
+        <view class="booking-status-label">{{item.label}}</view>
+      </view>
+    </view>
+    <view class="booking-status-retry" wx:if="{{bookingStatusError}}" bindtap="retryBookingStatus">预约数量暂未更新，点击重试</view>
+
+    <!-- 原型 .menu-list -->
+    <view class="menu-list my-menu">
+      <view
+        wx:for="{{features}}"
+        wx:key="key"
+        wx:if="{{item.key !== 'registrations'}}"
+        class="menu-row"
+        data-key="{{item.key}}"
+        bindtap="openFeature"
+        hover-class="menu-row-pressed"
+      >
+        <view class="menu-row-icon"><t-icon name="{{item.icon}}" size="32rpx" color="#10233f" /></view>
+        <view class="menu-row-copy">
+          <view class="menu-row-title">{{item.displayTitle || item.title}}</view>
+          <view class="menu-row-subtitle">{{item.displayDescription || item.description}}</view>
+        </view>
+        <view class="menu-row-arrow"><t-icon name="chevron-right" size="32rpx" color="#aab4c1" /></view>
+      </view>
+    </view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="openPoliciesPage">隐私与联系人政策</t-button>
+    <view class="state-panel state-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </block>
+</view>

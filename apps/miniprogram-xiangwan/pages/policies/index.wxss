@@ -1,0 +1,11 @@
+.policies-page {
+  background: #fff;
+}
+.policy-content {
+  display: block;
+  margin-top: 24rpx;
+  color: #39475b;
+  font-size: 27rpx;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}

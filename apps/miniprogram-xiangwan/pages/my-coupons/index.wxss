@@ -1,0 +1,44 @@
+/* 我的优惠券页级样式：公共类在 app.wxss（原型 coupon 虚线卡） */
+
+.coupons-page {
+  padding-top: 8rpx;
+}
+
+.coupons-panel {
+  margin-top: 20rpx;
+}
+
+.coupon-value {
+  color: #10233f;
+  font-size: 36rpx;
+  font-weight: 800;
+  line-height: 1.15;
+  word-break: break-all;
+}
+
+.coupon-title {
+  margin-top: 0;
+  font-size: 26rpx;
+}
+
+.coupon-notice {
+  margin-top: 14rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid #edf1f6;
+  color: #5e6f85;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.coupon-alert {
+  color: #84364b;
+}
+
+.coupon-order {
+  margin-top: 10rpx;
+}
+
+.compact-button {
+  margin-top: 0;
+  padding: 0;
+}

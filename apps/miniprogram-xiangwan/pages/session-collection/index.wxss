@@ -1,0 +1,61 @@
+.session-collection-page {
+  padding-top: 24rpx;
+}
+
+.collection-heading {
+  display: grid;
+  gap: 10rpx;
+}
+
+.collection-title {
+  margin: 4rpx 0 0;
+  font-size: 40rpx;
+}
+
+.session-choice-list {
+  margin-top: 30rpx;
+  border-top: 1rpx solid #e6ebf1;
+}
+
+.session-choice-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #e6ebf1;
+}
+
+.session-choice-pressed {
+  background: #f6f8fb;
+}
+
+.session-choice-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 6rpx;
+}
+
+.session-choice-title {
+  color: #12263f;
+  font-size: 27rpx;
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.session-choice-time {
+  color: #7b899c;
+  font-size: 22rpx;
+  line-height: 1.4;
+}
+
+.session-choice-status {
+  flex: none;
+  padding: 7rpx 14rpx;
+  border-radius: 999rpx;
+  background: #e9f0f8;
+  color: #29476c;
+  font-size: 20rpx;
+  font-weight: 700;
+}

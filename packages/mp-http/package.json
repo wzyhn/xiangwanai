@@ -1,0 +1,10 @@
+{
+  "name": "mp-http",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "mp-auth-session": "workspace:*",
+    "mp-weconq-auth-guard": "workspace:*"
+  }
+}

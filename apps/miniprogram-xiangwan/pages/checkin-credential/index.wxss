@@ -1,0 +1,70 @@
+/* 签到凭证页级样式：公共类在 app.wxss（原型 qr 区） */
+
+.checkin-page {
+  padding-top: 16rpx;
+}
+
+.qr-shell {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 292px;
+  height: 292px;
+  max-width: 100%;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx;
+  overflow: hidden;
+  border: 2rpx solid #10233f;
+  border-radius: 18rpx;
+  background: #ffffff;
+}
+
+.checkin-qr {
+  width: 260px;
+  height: 260px;
+  max-width: 100%;
+}
+
+.qr-loading {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #758399;
+  font-size: 24rpx;
+}
+
+.backup-panel {
+  margin-top: 24rpx;
+  padding: 22rpx 18rpx;
+  border-radius: 14rpx;
+  background: #f0f5fa;
+}
+
+.backup-label {
+  color: #758399;
+  font-size: 23rpx;
+}
+
+.backup-code {
+  margin-top: 12rpx;
+  color: #10233f;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 39rpx;
+  font-weight: 800;
+  letter-spacing: 3rpx;
+}
+
+.credential-meta {
+  margin-top: 16rpx;
+  color: #758399;
+  font-size: 22rpx;
+  line-height: 1.65;
+}

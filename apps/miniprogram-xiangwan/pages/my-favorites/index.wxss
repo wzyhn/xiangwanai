@@ -1,0 +1,110 @@
+/* 我的收藏页级样式：公共类在 app.wxss */
+
+.favorites-page {
+  padding-top: 0;
+  background: #ffffff;
+}
+
+.favorites-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+}
+
+.favorites-heading .section-heading {
+  margin: 0;
+}
+
+.favorites-count {
+  color: #7c8796;
+  font-size: 22rpx;
+}
+
+.favorite-event-row {
+  display: flex;
+  gap: 22rpx;
+  padding: 24rpx 0;
+  border-top: 1rpx solid #edf1f6;
+}
+
+.favorite-event-row:first-of-type {
+  margin-top: 12rpx;
+}
+
+.favorite-cover {
+  display: grid;
+  width: 216rpx;
+  height: 290rpx;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 16rpx;
+  color: rgba(16, 35, 63, 0.52);
+  font-size: 56rpx;
+  font-weight: 800;
+}
+
+.favorite-cover.event-poster-0 {
+  background: linear-gradient(150deg, #fff6d8, #f9e7ae);
+}
+
+.favorite-cover.event-poster-1 {
+  background: linear-gradient(150deg, #e9f3fd, #cfe4f7);
+}
+
+.favorite-cover.event-poster-2 {
+  background: linear-gradient(150deg, #fdeef1, #f6d3dc);
+}
+
+.favorite-cover.event-poster-3 {
+  background: linear-gradient(150deg, #eaf7f1, #cdeadd);
+}
+
+.favorite-event-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.favorite-meta {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 18rpx;
+  color: #7c8796;
+  font-size: 21rpx;
+}
+
+.favorite-date {
+  color: #7c8796;
+  font-size: 21rpx;
+}
+
+.favorite-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8rpx;
+  margin-top: auto;
+  padding-top: 12rpx;
+}
+
+.favorite-action {
+  width: 190rpx;
+  margin: 0;
+  font-size: 23rpx;
+  line-height: 60rpx;
+}
+
+.remove-action {
+  margin: 0;
+  color: #913d50;
+}
+
+.unavailable-label {
+  color: #8793a5;
+  font-size: 23rpx;
+}

@@ -1,0 +1,11 @@
+{
+  "productCode": "wq-xiangwan",
+  "appId": "wx05ff9791f73fe3bd",
+  "appIdStatus": "customer-provided",
+  "productionApiBaseUrl": "https://api.weconq.cn",
+  "productionApiBaseUrlStatus": "approved",
+  "privacyPolicyStatus": "approved",
+  "wechatPrivacyGuideStatus": "pending",
+  "backendDeploymentStatus": "approved",
+  "realDeviceAcceptanceStatus": "pending"
+}

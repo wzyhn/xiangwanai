@@ -1,0 +1,97 @@
+name: Xiangwan release gate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/miniprogram-xiangwan/**"
+      - "packages/mp-product-registry/**"
+      - ".github/workflows/xiangwan-release-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "apps/miniprogram-xiangwan/**"
+      - "packages/mp-product-registry/**"
+      - ".github/workflows/xiangwan-release-gate.yml"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Upload target to authorize"
+        required: true
+        default: trial
+        type: choice
+        options: [trial, release]
+      commit:
+        description: "Immutable full SHA; must equal the default main tip"
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  release-contract:
+    name: release checker contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          version: 10.8.0
+          run_install: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm --dir apps/miniprogram-xiangwan test
+
+  authorize-upload:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main' &&
+      vars.XIANGWAN_GITHUB_AUTHORIZATION_BOUNDARY_STATUS == 'approved'
+    needs: release-contract
+    name: authorize ${{ inputs.target }} upload
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: refs/heads/main
+          fetch-depth: 1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          version: 10.8.0
+          run_install: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Bind authorization to the default main tip
+        env:
+          AUTHORIZED_COMMIT: ${{ inputs.commit }}
+        shell: bash
+        run: |
+          [[ "$AUTHORIZED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$GITHUB_SHA" = "$AUTHORIZED_COMMIT"
+          test "$(git rev-parse HEAD)" = "$AUTHORIZED_COMMIT"
+          remote_main_sha="$(git ls-remote --exit-code origin refs/heads/main | cut -f1)"
+          test "$remote_main_sha" = "$AUTHORIZED_COMMIT"
+      - name: Authorize upload configuration
+        run: pnpm --dir apps/miniprogram-xiangwan run check:release -- --target=${{ inputs.target }}
+      - name: Record the only supported upload authorization boundary
+        run: |
+          echo "Xiangwan target=${{ inputs.target }} authorized at immutable commit=${{ inputs.commit }}."
+          echo "External GitHub authorization boundary status was approved outside this code tree."
+          echo "This workflow stores no WeChat private key and uploads nothing."
+          echo "Any uploader must depend on this successful job and use the identical commit."

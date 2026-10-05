@@ -1,0 +1,71 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/people/index",
+    "pages/person-detail/index",
+    "pages/past-activities/index",
+    "pages/activity-review/index",
+    "pages/session-collection/index",
+    "pages/external-resource/index",
+    "pages/session-detail/index",
+    "pages/registration/index",
+    "pages/contact-setup/index",
+    "pages/policies/index",
+    "pages/registration-confirm/index",
+    "pages/registration-success/index",
+    "pages/my/index",
+    "pages/my-profile/index",
+    "pages/my-benefits/index",
+    "pages/people-binding/index",
+    "pages/host-application/index",
+    "pages/my-registrations/index",
+    "pages/registration-detail/index",
+    "pages/my-orders/index",
+    "pages/order-detail/index",
+    "pages/my-coupons/index",
+    "pages/my-favorites/index",
+    "pages/checkin-credential/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "享玩 AI",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark"
+  },
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-calendar": "tdesign-miniprogram/calendar/calendar",
+    "t-checkbox-group": "tdesign-miniprogram/checkbox-group/checkbox-group",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea"
+  },
+  "tabBar": {
+    "color": "#7b7a75",
+    "selectedColor": "#12263f",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/past-activities/index",
+        "text": "往期活动"
+      },
+      {
+        "pagePath": "pages/my/index",
+        "text": "我的"
+      }
+    ],
+    "custom": true
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

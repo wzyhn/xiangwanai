@@ -1,0 +1,10 @@
+{
+  "name": "mp-weconq-auth-guard",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "miniprogram": ".",
+  "dependencies": {
+    "mp-weconq-auth-runtime": "workspace:*"
+  }
+}

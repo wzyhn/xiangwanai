@@ -1,0 +1,147 @@
+/* 报名表页级样式：公共类在 app.wxss（原型 apply-form/registration-summary） */
+
+.form-page {
+  padding-top: 16rpx;
+}
+
+.registration-blocked {
+  box-sizing: border-box;
+  margin: 34rpx 0 0;
+  padding: 52rpx 28rpx 48rpx;
+  border: 1rpx solid #f0d8de;
+  border-radius: 18rpx;
+  background: #fffafb;
+}
+
+.registration-blocked-icon {
+  display: grid;
+  width: 64rpx;
+  height: 64rpx;
+  margin: 0 auto 18rpx;
+  place-items: center;
+  border-radius: 50%;
+  background: #f8e3e8;
+  color: #913d50;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.registration-blocked-title {
+  color: #10233f;
+  font-size: 30rpx;
+  font-weight: 750;
+}
+
+.registration-blocked-message {
+  margin-top: 14rpx;
+  color: #913d50;
+  font-size: 24rpx;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.registration-retry-button {
+  width: 280rpx;
+  margin: 28rpx auto 0;
+}
+
+.policy-block {
+  margin-top: 18rpx;
+  padding: 18rpx 0;
+  border-top: 1rpx solid #edf1f6;
+}
+
+.contact-policy-block {
+  border-bottom: 1rpx solid #edf1f6;
+}
+
+.policy-button {
+  margin: 8rpx 0 0;
+  padding: 0;
+}
+
+.policy-version {
+  margin: 0 0 10rpx;
+}
+
+.policy-content {
+  display: block;
+  padding: 18rpx;
+  border-radius: 12rpx;
+  background: #f7fafc;
+  color: #39475b;
+  font-size: 25rpx;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.form-feedback,
+.form-truth {
+  padding-right: 8rpx;
+  padding-left: 8rpx;
+}
+
+.form-bottom-action {
+  display: flex;
+  align-items: center;
+}
+
+.form-total {
+  flex: none;
+  width: 190rpx;
+}
+
+.form-total-label {
+  color: #8a96a8;
+  font-size: 20rpx;
+}
+
+.form-total-value {
+  margin-top: 4rpx;
+  color: #10233f;
+  font-size: 29rpx;
+  font-weight: 850;
+}
+
+.form-next-button {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+}
+
+@media (max-width: 360px) {
+  .form-total {
+    width: 155rpx;
+  }
+}
+
+.registration-profile {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+.registration-avatar {
+  flex: none;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+.registration-avatar-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #10233f;
+  color: #fff;
+  font-size: 32rpx;
+}
+.registration-profile-name {
+  color: #10233f;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+.registration-profile-caption {
+  margin-top: 6rpx;
+  color: #7b899c;
+  font-size: 22rpx;
+}

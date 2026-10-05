@@ -1,0 +1,26 @@
+<view class="page person-detail-page">
+  <view class="state-panel" wx:if="{{loading && !person}}"><t-loading theme="circular" size="40rpx" text="正在加载人物介绍…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage && !person}}">
+    <view>{{errorMessage}}</view>
+    <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+  </view>
+
+  <block wx:if="{{person}}">
+    <!-- 原型 .person-top：头像 + 名称 + 头衔 -->
+    <view class="person-top">
+      <view class="avatar-circle person-avatar-large">{{person.avatarText}}</view>
+      <view class="person-top-copy">
+        <view class="person-top-name">{{person.displayName}}</view>
+        <view class="person-top-headline" wx:if="{{person.headline}}">{{person.headline}}</view>
+      </view>
+    </view>
+    <view class="state-panel state-error" wx:if="{{errorMessage}}">
+      <view>当前仍展示上次成功加载的人物资料：{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+    <view class="section-heading">人物介绍</view>
+    <view class="content-text" wx:if="{{person.hasIntroduction}}">{{person.introduction}}</view>
+    <view class="truth-note" wx:else>这位社区伙伴暂未填写详细介绍。</view>
+    <view class="truth-note">公开资料经社区审核 · 发布于 {{person.publishedAt}}</view>
+  </block>
+</view>

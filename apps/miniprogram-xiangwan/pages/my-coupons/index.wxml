@@ -1,0 +1,57 @@
+<view class="page coupons-page">
+  <view class="state-panel" wx:if="{{needsLogin}}">
+    <view>登录后查看自己的优惠券</view>
+    <t-button block theme="primary" shape="round" t-class="primary-button inline-action" loading="{{loading}}" bindtap="loginAndLoad">微信登录</t-button>
+    <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </view>
+
+  <block wx:else>
+    <!-- 原型 .category-tabs：下划线页签 -->
+    <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="category-tabs-scroll">
+      <view class="category-tabs">
+        <view
+          wx:for="{{stateFilters}}"
+          wx:key="value"
+          class="category-tab {{activeState === item.value ? 'category-tab-on' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="selectState"
+          hover-class="category-tab-pressed"
+        >{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="state-panel" wx:if="{{loading && !items.length}}"><t-loading theme="circular" size="40rpx" text="正在加载优惠券…" /></view>
+    <view class="state-panel state-error" wx:elif="{{errorMessage && !items.length}}">
+      <view>{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+    <view class="quiet-empty" wx:elif="{{emptyMessage}}">{{emptyMessage}}</view>
+    <view class="state-panel state-error" wx:if="{{errorMessage && items.length}}">
+      <view>当前仍展示上次成功加载的优惠券：{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+
+    <!-- 原型 coupon 卡：左侧面值虚线分隔 -->
+    <view class="coupon-panel coupons-panel" wx:for="{{items}}" wx:key="couponId">
+      <view class="coupon-panel-value">
+        <text class="coupon-value">{{item.faceValueText}}</text>
+        <view class="state-tag {{item.stateTone === 'alert' ? 'state-alert' : item.stateTone === 'warm' ? 'state-warm' : item.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{item.stateLabel}}</view>
+      </view>
+      <view class="coupon-panel-body">
+        <view class="row-card-title coupon-title">{{item.minimumOrderText}}</view>
+        <view class="row-card-sub">{{item.grantKindLabel}}</view>
+        <view class="event-line"><text class="fact-key">适用</text><text>{{item.applicabilityText}}</text></view>
+        <view class="event-line"><text class="fact-key">有效期</text><text>{{item.validFrom}} 至 {{item.expiresAt}}</text></view>
+        <view class="coupon-notice coupon-alert" wx:if="{{item.correctionRequired}}">该优惠券需要人工核对，请勿按可用权益处理。</view>
+        <view class="coupon-notice" wx:if="{{item.adjustment}}">{{item.adjustment.label}} · {{item.adjustment.occurredAt}}</view>
+        <view class="coupon-order" wx:if="{{item.activeOrderId}}">
+          <t-button block theme="primary" variant="text" size="small" t-class="text-button compact-button" data-order-id="{{item.activeOrderId}}" bindtap="openOrder">查看关联订单 ›</t-button>
+        </view>
+      </view>
+    </view>
+
+    <view class="truth-note" wx:if="{{items.length}}">下单时会再次确认优惠券是否适用于所选活动。</view>
+    <view class="list-footer" wx:if="{{loadingMore}}">正在加载更多…</view>
+    <view class="list-footer" wx:elif="{{items.length && !nextCursor}}">已展示全部优惠券<text wx:if="{{asOf}}"> · 截至 {{asOf}}</text></view>
+  </block>
+</view>

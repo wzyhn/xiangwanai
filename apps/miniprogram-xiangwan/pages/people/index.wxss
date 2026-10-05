@@ -1,0 +1,50 @@
+.people-page {
+  padding-top: 24rpx;
+}
+
+.person-row {
+  display: flex;
+  padding: 32rpx 0;
+  border-bottom: 1rpx solid #e6ebf1;
+}
+
+.person-row-pressed {
+  background: #f8fafc;
+}
+
+.person-avatar {
+  width: 86rpx;
+  height: 86rpx;
+  font-size: 34rpx;
+}
+
+.person-content {
+  min-width: 0;
+  margin-left: 24rpx;
+  flex: 1;
+}
+
+.person-name {
+  color: #10233f;
+  font-size: 31rpx;
+  font-weight: 750;
+}
+
+.person-headline,
+.person-intro {
+  margin-top: 10rpx;
+  color: #607087;
+  font-size: 24rpx;
+  line-height: 1.55;
+}
+
+.person-intro {
+  color: #7b899c;
+}
+
+.person-link {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  margin-top: 16rpx;
+}

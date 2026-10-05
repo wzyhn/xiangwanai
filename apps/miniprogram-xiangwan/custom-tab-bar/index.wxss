@@ -1,0 +1,31 @@
+.navigation {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  box-sizing: border-box;
+  border-top: 1rpx solid #e8edf2;
+  padding-top: 14rpx;
+  padding-bottom: calc(14rpx + env(safe-area-inset-bottom));
+  background: #fff;
+}
+.navigation-item {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 80rpx;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6rpx;
+  color: #6f7c8d;
+}
+.navigation-item-active {
+  color: #10233f;
+}
+.navigation-label {
+  font-size: 22rpx;
+  line-height: 1.4;
+}

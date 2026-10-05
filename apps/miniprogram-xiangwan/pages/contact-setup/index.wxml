@@ -1,0 +1,39 @@
+<view class="page setup-page">
+  <view class="state-panel" wx:if="{{loading}}"><t-loading theme="circular" size="40rpx" text="正在检查隐私与联系人政策…" /></view>
+  <view class="state-panel state-error" wx:elif="{{errorMessage || blockedMessage}}">
+    <view>{{blockedMessage || errorMessage}}</view>
+    <t-button block theme="default" variant="outline" t-class="secondary-button" bindtap="loadPolicies">重新检查</t-button>
+  </view>
+  <view wx:else>
+    <view class="setup-card">
+      <view class="eyebrow">WELCOME TO XIANGWAN</view>
+      <view class="setup-title">完善报名信息</view>
+      <view class="setup-description">微信登录已完成。请填写昵称和手机号，之后报名活动时会自动填入，你仍可在每次报名时修改。</view>
+      <view class="field-label">昵称 <text class="required">*</text></view>
+      <t-input value="{{contactName}}" maxlength="64" placeholder="请输入昵称" clearable borderless="{{false}}" bindchange="updateName" bindclear="clearName" />
+      <view class="field-error" wx:if="{{nameError}}">{{nameError}}</view>
+      <view class="field-label">手机号 <text class="required">*</text></view>
+      <t-input value="{{contactPhone}}" type="text" maxlength="24" placeholder="中国大陆手机号或国际号码" clearable borderless="{{false}}" bindchange="updatePhone" bindclear="clearPhone" />
+      <view class="field-help">手机号不做验证码校验，请确保手机号正确，活动通知会使用此号码。</view>
+      <view class="field-error" wx:if="{{phoneError}}">{{phoneError}}</view>
+      <view class="section-heading setup-optional-heading">更多个人资料（选填）</view>
+      <view class="field-label">个人标签</view>
+      <t-input value="{{tagsText}}" maxlength="280" placeholder="用逗号分隔，最多 8 个" disabled="{{saving}}" borderless="{{false}}" bindchange="updateTags" />
+      <view class="field-label">个人简介</view>
+      <t-textarea value="{{introduction}}" maxlength="500" placeholder="介绍一下自己" disabled="{{saving}}" autosize="{{true}}" bindchange="updateIntroduction" />
+      <view class="field-help">{{optionalNotice}}</view>
+      <view class="field-error" wx:if="{{optionalError}}">{{optionalError}}</view>
+      <t-button block wx:if="{{optionalPendingOperation}}" theme="default" variant="text" t-class="text-button" bindtap="restoreOptionalOperation">恢复上次提交内容</t-button>
+    </view>
+    <view class="setup-policy">
+      <view class="section-heading">隐私与联系人政策</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="openPoliciesPage">查看协议与规则 ›</t-button>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="openPrivacyContract">查看微信隐私保护指引 ›</t-button>
+      <t-checkbox-group value="{{acknowledged ? ['acknowledged'] : []}}" options="{{acknowledgementOptions}}" borderless bindchange="updateAcknowledgement" />
+      <view class="field-error" wx:if="{{acknowledgementError}}">{{acknowledgementError}}</view>
+    </view>
+    <view class="field-error" wx:if="{{formError}}">{{formError}}</view>
+    <t-button block theme="primary" shape="rectangle" t-class="primary-button setup-save" loading="{{saving}}" disabled="{{saving}}" bindtap="save">保存并继续</t-button>
+    <t-button block wx:if="{{optionalError}}" theme="default" variant="text" t-class="text-button setup-skip" disabled="{{saving}}" bindtap="skipOptionalAndSave">跳过可选资料，继续</t-button>
+  </view>
+</view>

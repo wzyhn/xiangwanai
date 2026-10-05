@@ -1,0 +1,12 @@
+.git
+node_modules
+**/node_modules
+**/.next
+**/miniprogram_npm
+.tmp
+**/.env
+**/.env.local
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx

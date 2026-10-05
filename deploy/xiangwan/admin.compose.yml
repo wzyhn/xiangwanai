@@ -1,0 +1,17 @@
+services:
+  admin:
+    image: "${XIANGWAN_ADMIN_IMAGE:-xiangwan-admin:local}"
+    build:
+      context: ../..
+      dockerfile: apps/xiangwan-admin-web/Dockerfile
+      args:
+        XIANGWAN_ADMIN_API_ORIGIN: http://api:8080
+    restart: unless-stopped
+    ports: ["127.0.0.1:${XIANGWAN_ADMIN_PUBLISHED_PORT:-3002}:3000"]
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+    depends_on:
+      api:
+        condition: service_healthy

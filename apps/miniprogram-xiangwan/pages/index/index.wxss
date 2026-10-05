@@ -1,0 +1,123 @@
+/* 首页页级样式：公共组件类在 app.wxss（严格对齐原型 styles.css） */
+
+.home-page {
+  padding-top: 0;
+}
+
+.brand-hero-image {
+  display: block;
+  width: 100%;
+  height: 330rpx;
+}
+
+/* 原型 .topics 横向滚动条隐藏 */
+.topics {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.topic-pill-pressed {
+  opacity: 0.7;
+}
+
+.filter-trigger-pressed {
+  background: #f6f8fb;
+}
+
+.feed {
+  padding-bottom: 12rpx;
+}
+
+.event-social {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.event-participants {
+  gap: 8rpx;
+  padding-top: 0;
+}
+
+.event-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.event-session {
+  overflow: hidden;
+  color: #6f7c8d;
+  font-size: 22rpx;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-hero {
+  position: relative;
+  margin-right: -28rpx;
+  margin-left: -28rpx;
+}
+.home-hero .home-intro {
+  margin: 0;
+  padding: 28rpx;
+}
+.home-hero-with-image {
+  min-height: 330rpx;
+}
+.home-hero-with-image .brand-hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+.home-hero-with-image .home-intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 330rpx;
+  box-sizing: border-box;
+  padding-top: 60rpx;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(10, 24, 42, 0.82));
+}
+.home-hero-with-image .eyebrow,
+.home-hero-with-image .home-title,
+.home-hero-with-image .home-kicker,
+.home-hero-with-image .home-slogan {
+  color: #fff;
+}
+.home-hero .home-brand-line {
+  flex-wrap: wrap;
+  white-space: normal;
+  gap: 8rpx 18rpx;
+}
+.home-hero .home-title {
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 44rpx;
+  line-height: 1.3;
+}
+.home-hero .home-kicker {
+  margin-left: 0;
+  white-space: normal;
+  word-break: break-word;
+}
+.home-hero .home-slogan {
+  margin-top: 10rpx;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.filter-trigger-copy {
+  min-width: 0;
+}
+.filter-trigger-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

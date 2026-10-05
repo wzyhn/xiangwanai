@@ -1,0 +1,75 @@
+<view class="page favorites-page">
+  <view class="state-panel" wx:if="{{needsLogin}}">
+    <view>登录后查看自己收藏的活动</view>
+    <t-button block theme="primary" shape="round" t-class="primary-button inline-action" loading="{{loading}}" bindtap="loginAndLoad">微信登录</t-button>
+    <view class="form-error" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  </view>
+
+  <block wx:else>
+    <view class="favorites-heading">
+      <view class="section-heading">想去的活动</view>
+      <view class="favorites-count" wx:if="{{items.length}}">{{items.length}} 场</view>
+    </view>
+    <view class="state-panel" wx:if="{{loading && !items.length}}"><t-loading theme="circular" size="40rpx" text="正在加载收藏…" /></view>
+    <view class="state-panel state-error" wx:elif="{{errorMessage && !items.length}}">
+      <view>{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+    <view class="quiet-empty" wx:elif="{{emptyMessage}}">{{emptyMessage}}</view>
+    <view class="success-banner" wx:if="{{successMessage}}">{{successMessage}}</view>
+    <view class="state-panel state-error" wx:if="{{errorMessage && items.length}}">
+      <view>当前仍展示上次成功加载的收藏：{{errorMessage}}</view>
+      <t-button block theme="primary" variant="text" size="small" t-class="text-button" bindtap="retry">重新加载</t-button>
+    </view>
+
+    <view class="favorite-event-row" wx:for="{{items}}" wx:key="seriesId">
+      <view class="favorite-cover event-poster-{{index % 4}}">
+        <text>{{item.titleInitial}}</text>
+      </view>
+      <view class="favorite-event-info">
+        <view class="row-card-head">
+          <view class="state-tag {{item.stateTone === 'alert' ? 'state-alert' : item.stateTone === 'warm' ? 'state-warm' : item.stateTone === 'quiet' ? 'state-quiet' : ''}}">{{item.statusLabel}}</view>
+        </view>
+        <view class="row-card-title">{{item.title}}</view>
+        <view class="favorite-date" wx:if="{{item.favoritedAt}}">收藏于 {{item.favoritedAt}}</view>
+        <view class="favorite-meta" wx:if="{{item.favoriteAvatars.length || item.wantCountText}}">
+          <view class="avatar-stack" wx:if="{{item.favoriteAvatars.length}}">
+            <image
+              wx:for="{{item.favoriteAvatars}}"
+              wx:for-item="avatar"
+              wx:key="*this"
+              class="stack-avatar"
+              style="{{index > 0 ? 'margin-left: -12rpx; ' : ''}}z-index: {{item.favoriteAvatars.length - index}};"
+              src="{{avatar}}"
+              mode="aspectFill"
+              data-series-id="{{item.seriesId}}"
+              data-url="{{avatar}}"
+              binderror="onFavoriteAvatarError"
+            />
+          </view>
+          <text wx:if="{{item.wantCountText}}">{{item.wantCountText}}</text>
+        </view>
+        <view class="favorite-actions">
+        <t-button block theme="default" variant="outline" shape="round"
+          t-class="secondary-button favorite-action"
+          wx:if="{{item.sessionsAvailable}}"
+          data-series-id="{{item.seriesId}}"
+          bindtap="openSessions"
+        >查看活动</t-button>
+        <view class="unavailable-label" wx:else>当前没有公开场次</view>
+        <t-button block theme="primary" variant="text" size="small"
+          t-class="text-button remove-action"
+          disabled="{{removingSeriesId === item.seriesId}}"
+          loading="{{removingSeriesId === item.seriesId}}"
+          data-series-id="{{item.seriesId}}"
+          data-title="{{item.title}}"
+          bindtap="removeFavorite"
+        >取消收藏</t-button>
+        </view>
+      </view>
+    </view>
+
+    <view class="list-footer" wx:if="{{loadingMore}}">正在加载更多…</view>
+    <view class="list-footer" wx:elif="{{items.length && !nextCursor}}">已展示全部收藏<text wx:if="{{asOf}}"> · 截至 {{asOf}}</text></view>
+  </block>
+</view>

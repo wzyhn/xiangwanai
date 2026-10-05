@@ -1,0 +1,11 @@
+{
+  "name": "mp-weconq-auth-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "miniprogram": ".",
+  "dependencies": {
+    "mp-weconq-auth-client": "workspace:*",
+    "mp-auth-session": "workspace:*"
+  }
+}
