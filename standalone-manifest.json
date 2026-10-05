@@ -4582,6 +4582,10 @@
     "internal/middleware/requestid.go": {
       "source_sha256": "0da3ec0872b122eaf697ab4e6911c7ec755e397ef1ef71f1843fbb9739a68357",
       "exported_sha256": "d6d24f55306f5698a029ba9889947855853d753bf3c0023e5958611d4ca3394a"
+    },
+    "scripts/sync-miniprogram-registry-packages.mjs": {
+      "source_sha256": "1995dbf8a23456cccaa4f645c152f384d142a7275d3e7bbeea93a3bc5f87caf2",
+      "exported_sha256": "1995dbf8a23456cccaa4f645c152f384d142a7275d3e7bbeea93a3bc5f87caf2"
     }
   },
   "shared_workspace_packages": [
