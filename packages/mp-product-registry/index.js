@@ -4,8 +4,11 @@ const XIANGWAN_CONFIG = Object.freeze({
   appIdStatus: "customer-provided", shareEntryPath: "/pages/index/index",
 });
 const MINI_PROGRAM_REGISTRY = Object.freeze({ "wq-xiangwan": XIANGWAN_CONFIG });
-function getMiniProgramConfig(code) { return MINI_PROGRAM_REGISTRY[String(code || "").trim()]; }
+function getMiniProgramConfig(code) {
+  const normalized = String(code || "").trim().toLowerCase();
+  return Object.prototype.hasOwnProperty.call(MINI_PROGRAM_REGISTRY, normalized) ? MINI_PROGRAM_REGISTRY[normalized] : null;
+}
 function listMiniProgramConfigs() { return [XIANGWAN_CONFIG]; }
-function lintProductCode(code) { return code === "wq-xiangwan"; }
+const { lintProductCode } = require("./lib/lint");
 module.exports = { DEFAULT_SHARE_ENTRY_PATH: "/pages/index/index", MINI_PROGRAM_REGISTRY,
   getMiniProgramConfig, listMiniProgramConfigs, lintProductCode };
