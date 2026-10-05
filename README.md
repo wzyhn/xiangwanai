@@ -27,6 +27,8 @@ pnpm --filter xiangwan-admin-web dev
 
 微信开发者工具导入 `apps/miniprogram-xiangwan`，执行“构建 npm”。运行配置以 `config/release.json` 为真相源，手工运行副本 `release.js` 必须逐字段一致。默认 API 为 `https://api.weconq.cn`；请使用自己的 AppID 和相应服务器配置，AppSecret 只放服务端。
 
+开发者工具“构建 npm”会重写目录；每次构建后在仓库根依次执行 `node scripts/sync-miniprogram-workspace-packages.mjs` 和 `node scripts/sync-miniprogram-registry-packages.mjs`，恢复完整 workspace 包与 dayjs/tslib 子路径。
+
 ## 部署
 
 见 [独立部署说明](deploy/xiangwan/README.md)。本仓库可从自身源码构建 API、迁移工具和后台，不需要原平台仓库。PostgreSQL 是唯一必需的数据服务；生产 OIDC、微信及支付资产由部署环境独立配置。
