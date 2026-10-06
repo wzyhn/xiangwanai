@@ -1,0 +1,10 @@
+# Reviewed historical fixtures only: UUID operation keys, path traversal fixtures, SQL SHA256 hashes, unsigned JWT rejection test.
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:apps/miniprogram-xiangwan/features/checkin-credential/model.test.js:generic-api-key:48
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:apps/xiangwan-admin-web/src/lib/photo-curation-recovery.test.ts:generic-api-key:9
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:apps/xiangwan-admin-web/src/lib/refund-action-recovery.test.ts:generic-api-key:9
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:deploy/sql/manifest.json:generic-api-key:31
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:deploy/sql/manifest.json:generic-api-key:32
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:internal/domains/xiangwan/api/brand_hero_handler_test.go:generic-api-key:219
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:internal/domains/xiangwan/api/cover_image_handler_test.go:generic-api-key:150
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:internal/domains/xiangwan/api/consumer_identity_handler_test.go:generic-api-key:579
+ff238c7e47c1455a0b50c4473c7005c28884f9d7:internal/pkg/jwt/jwt_test.go:jwt:183

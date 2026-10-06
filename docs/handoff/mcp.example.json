@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "coolify": {
+      "url": "https://YOUR_COOLIFY_HOST/mcp",
+      "headers": {
+        "Authorization": "Bearer REPLACE_LOCALLY_WITH_OWNER_AUTHORIZED_TOKEN"
+      }
+    }
+  }
+}
