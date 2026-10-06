@@ -37,6 +37,8 @@ pnpm --filter xiangwan-admin-web dev
 
 ## 协作与集成
 
+非程序员使用 AI 开发：从 [交接入门与可复制提示词](docs/handoff/README.md) 开始。安全约定见 [SECURITY.md](SECURITY.md)。
+
 Fork 本仓库、创建功能分支并提交 PR，维护者检查后接受到 main。你无需访问平台私有仓库。产品源码的已接受改动可以通过限定目录映射生成私有集成 PR；共享依赖及发行支持文件在本仓库单独评审，不自动修改平台公共代码。冲突保留两边改动，由维护者处理。
 
 见 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [发行 manifest](standalone-manifest.json)。代码公开可见；仓库未额外指定开源许可证，贡献不自动取得生产部署、客户数据或品牌使用权限。

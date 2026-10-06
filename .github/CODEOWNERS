@@ -1,0 +1,12 @@
+# Distribution, security and deployment boundaries need maintainer review.
+/.github/ @wzyhn
+/.gitleaksignore @wzyhn
+/.gitignore @wzyhn
+/SECURITY.md @wzyhn
+/scripts/check-public-boundary.mjs @wzyhn
+/deploy/ @wzyhn
+/docs/handoff/ @wzyhn
+/standalone-manifest.json @wzyhn
+/packages/ @wzyhn
+/internal/capabilities/ @wzyhn
+/internal/pkg/ @wzyhn

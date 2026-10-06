@@ -4599,6 +4599,45 @@
     "mp-weconq-auth-runtime"
   ],
   "distribution_adaptations": [
-    "Product registry contains only Xiangwan and preserves existing lookup/lint interface."
-  ]
+    "Product registry contains only Xiangwan and preserves existing lookup/lint interface.",
+    "Public-only AI handoff documentation and secret boundary checks; credentials are never included in the public distribution."
+  ],
+  "public_support_files": {
+    ".github/CODEOWNERS": {
+      "sha256": "510fc4ccb43ee7e16977d3bce8bc0d6a13eaa9156bfbd2273c32895b5737b524"
+    },
+    ".gitleaksignore": {
+      "sha256": "30d01693df23b24a697b79348c4b04b0e0d3a88b613b82a9013ceaf432bb1bef"
+    },
+    "SECURITY.md": {
+      "sha256": "8d518990ae1ca26ab560cf2600d9fe80a4af146199fd288668d1573102364df1"
+    },
+    "docs/handoff/01-start.md": {
+      "sha256": "c387d210feab99dfbd00df8838b33f7afe87f395affe6b475d3fb295ab1bc2a1"
+    },
+    "docs/handoff/02-change.md": {
+      "sha256": "c1d805e5e53537d58a49dee596e301fd23d7a7a6afe48b6c0f2f0d71da494be9"
+    },
+    "docs/handoff/03-deploy.md": {
+      "sha256": "101df9d4d35e1f5916605399185f545e6ef44242418603edb2126d267a604ebf"
+    },
+    "docs/handoff/04-platform-sync.md": {
+      "sha256": "33c0479d4ff44d066eab53e900c0ba710c9f4621bb342221ec4660565223eb7a"
+    },
+    "docs/handoff/05-operations.md": {
+      "sha256": "987931b960578f517c94c65705b73e43ac134c761d0507e954b9802ff8d375bb"
+    },
+    "docs/handoff/README.md": {
+      "sha256": "79e6e6346178a5d2adfb5fbd77284d519e88a7f871bb097cb795f925471a575c"
+    },
+    "docs/handoff/mcp.example.json": {
+      "sha256": "b7364f30ef9740730320064df6d7e0bef38efcafac32ff78c6c20b379b7cb451"
+    },
+    "scripts/check-public-boundary.mjs": {
+      "sha256": "8e57abc2723cec44067e782409c361a9ec67b601098e63d56bb9d5535bdd5db6"
+    },
+    "scripts/check-public-boundary.test.mjs": {
+      "sha256": "34f9e46d9b0a0343545408c48c466cd490c7a38b674a999071a0429abd85e327"
+    }
+  }
 }

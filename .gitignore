@@ -16,3 +16,22 @@ coverage/
 *.exe
 *.dll
 project.private.config.json
+# Local AI/deployment credentials and operational exports
+mcp.json
+.mcp.json
+*.local.json
+*.secret.*
+*.zip
+*.7z
+*.p8
+*.p12
+*.jks
+*.keystore
+*.dump
+*.backup
+*.sqlite*
+id_rsa*
+id_ed25519*
+AppSecret.txt
+credentials.json
+secrets/
